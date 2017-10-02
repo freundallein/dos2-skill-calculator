@@ -14,6 +14,11 @@ const nullifyObjectValues = (obj) => {
     Object.keys(obj).map((key) => obj[key] = false);
 };
 
+export const mapObject = (object, callback) => {
+    return Object.keys(object).map(function (key) {
+        return callback(key, object[key]);
+    });
+};
 
 let character = {
     name: null,
@@ -148,50 +153,44 @@ let character = {
             default:
                 min = 0;
         }
-        (this[part][name] > min && this.hasPoints(part)) ? this[part][name] -= 1 : null
+        (this[part][name] > min) ? this[part][name] -= 1 : null
     },
     hasPoints(part) {
         return this.getPoints()[part]
     },
     setRace(race) {
+        this.nullifyRacialTalents();
+        this.race = race;
         switch (race) {
             case 'human':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('Ingenious');
                 this.switchRacialTalent('Thrifty');
                 break;
             case 'elf':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('AncestralKnowledge');
                 this.switchRacialTalent('CorpseEater');
                 break;
             case 'lizard':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('Sophisticated');
                 this.switchRacialTalent('Spellsong');
                 break;
             case 'dwarf':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('DwarvenGuile');
                 this.switchRacialTalent('Sturdy');
                 break;
             case 'undead_human':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('Ingenious');
                 this.switchRacialTalent('Undead');
                 break;
             case 'undead_elf':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('CorpseEater');
                 this.switchRacialTalent('Undead');
                 break;
             case 'undead_lizard':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('Sophisticated');
                 this.switchRacialTalent('Undead');
                 break;
             case 'undead_dwarf':
-                this.nullifyRacialTalents();
                 this.switchRacialTalent('Sturdy');
                 this.switchRacialTalent('Undead');
                 break;
@@ -202,9 +201,4 @@ let character = {
     }
 };
 
-
-console.log(character.racialTalents);
-console.log(character.getPoints());
-character.setRace('undead_human');
-console.log(character.racialTalents);
-console.log(character.getPoints());
+export default character;
