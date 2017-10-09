@@ -20,7 +20,43 @@ export default class App extends React.Component {
         this.state = {char: character};
     }
 
+    renderPlan(item, plan) {
+        return <View key={item.key} style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+        }}>
+            <View style={{flex: .3}}>
+                <Button title={"-"}
+                        onPress={() => {
+                            let char = this.state.char;
+                            char.setDown(plan, item.key);
+                            this.setState({char: char})
+                        }
+                        }
+                />
+            </View>
+            <View style={{flex: .4}}>
+                <Text>{item.key} --> {item.value}</Text>
+            </View>
+            <View style={{flex: .3}}>
+                <Button title={"+"}
+                        onPress={() => {
+                            let char = this.state.char;
+                            char.setUp(plan, item.key);
+                            this.setState({char: char})
+                        }
+                        }
+                />
+            </View>
+        </View>
+    };
+
     render() {
+        const attributes = mapObject(this.state.char.attributes);
+        const combat = mapObject(this.state.char.combat);
+        const civil = mapObject(this.state.char.civil);
+        const talents = mapObject(this.state.char.talents);
+
         return (
             <View style={{flex: 1, paddingTop: 20, backgroundColor: 'white'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -81,101 +117,57 @@ export default class App extends React.Component {
                 </View>
                 <IndicatorViewPager
                     style={{flex: 1}}
-                    indicator={<PagerTitleIndicator
-                        titles={['Attributes', 'Combat' +
-                        ' Abilities', 'Civil Abilities', 'Talents']}/>}
-                >
+                    indicator={
+                        <PagerTitleIndicator
+                            titles={['Attributes', 'Combat' +
+                            ' Abilities', 'Civil Abilities', 'Talents']}
+                        />}>
                     <View style={{backgroundColor: 'cadetblue'}}>
                         <Text>Attributes</Text>
                         <Text>Available points
                             -> {this.state.char.getPoints().attributes}</Text>
-                        {mapObject(this.state.char.attributes, (key, value) => {
-                            return <View key={key}>
-                                <Button title={"-"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.setDown('attributes', key);
-                                            this.setState({char: char})
-                                        }
-                                        }/>
-                                <Text>{key} --> {value}</Text>
-                                <Button title={"+"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.setUp('attributes', key);
-                                            this.setState({char: char})
-                                        }
-                                        }
-                                />
-                            </View>
-                        })}
+                        <FlatList
+                            data={attributes}
+                            renderItem={({item}) => this.renderPlan(item, 'attributes')}
+                        />
                     </View>
                     <View style={{backgroundColor: 'cornflowerblue'}}>
                         <Text>Combat Abilities</Text>
                         <Text>Available points
                             -> {this.state.char.getPoints().combat}</Text>
-                        {mapObject(this.state.char.combat, (key, value) => {
-                            return <View key={key}>
-                                <Button title={"-"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.setDown('combat', key);
-                                            this.setState({char: char})
-                                        }
-                                        }/>
-                                <Text>{key} --> {value}</Text>
-                                <Button title={"+"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.setUp('combat', key);
-                                            this.setState({char: char})
-                                        }
-                                        }
-                                />
-                            </View>
-                        })}
+                        <FlatList
+                            data={combat}
+                            renderItem={({item}) => this.renderPlan(item, 'combat')}
+                        />
                     </View>
                     <View style={{backgroundColor: 'cornflowerblue'}}>
                         <Text>Civil Abilities</Text>
                         <Text>Available points
                             -> {this.state.char.getPoints().civil}</Text>
-                        {mapObject(this.state.char.civil, (key, value) => {
-                            return <View key={key}>
-                                <Button title={"-"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.setDown('civil', key);
-                                            this.setState({char: char})
-                                        }
-                                        }/>
-                                <Text>{key} --> {value}</Text>
-                                <Button title={"+"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.setUp('civil', key);
-                                            this.setState({char: char})
-                                        }
-                                        }
-                                />
-                            </View>
-                        })}
+                        <FlatList
+                            data={civil}
+                            renderItem={({item}) => this.renderPlan(item, 'civil')}
+                        />
                     </View>
                     <View style={{backgroundColor: 'red'}}>
                         <Text>Talents</Text>
                         <Text>Available points
                             -> {this.state.char.getPoints().talents}</Text>
-                        {mapObject(this.state.char.talents, (key, value) => {
-                            return <View key={key}><Text>{key}
-                                --> {(value) ? 1 : 0}</Text>
-                                <Button title={"?"}
-                                        onPress={() => {
-                                            let char = this.state.char;
-                                            char.switchTalent(key);
-                                            this.setState({char: char})
-                                        }
-                                        }/>
-                            </View>
-                        })}
+                        <FlatList
+                            data={talents}
+                            renderItem={({item}) => {
+                                return <View key={item.key}><Text>{item.key}
+                                    --> {(item.value) ? 1 : 0}</Text>
+                                    <Button title={"?"}
+                                            onPress={() => {
+                                                let char = this.state.char;
+                                                char.switchTalent(item.key);
+                                                this.setState({char: char})
+                                            }
+                                            }/>
+                                </View>
+                            }}
+                        />
                     </View>
                 </IndicatorViewPager>
             </View>

@@ -14,10 +14,39 @@ const nullifyObjectValues = (obj) => {
     Object.keys(obj).map((key) => obj[key] = false);
 };
 
-export const mapObject = (object, callback) => {
+export const mapObject = (object) => {
     return Object.keys(object).map(function (key) {
-        return callback(key, object[key]);
+        return {
+            key: key,
+            value: object[key]
+        }
     });
+};
+
+export const getBaseHealth = (level) => {
+    const baseDmg = {
+        1: 30,
+        2: 45,
+        3: 65,
+        4: 85,
+        5: 100,
+        6: 135,
+        7: 165,
+        8: 200,
+        9: 235,
+        10: 285,
+        11: 345,
+        12: 415,
+        13: 560,
+        14: 685,
+        15: 840,
+        16: 1015,
+        17: 1255,
+        18: 1790,
+        19: 2240,
+        20: 2815
+    };
+    return baseDmg[level]
 };
 
 let character = {
@@ -108,7 +137,6 @@ let character = {
         Thrifty: false,
         Undead: false,
     },
-    stat: {},
     getPoints() {
         return {
             attributes: 3 + 2 * (this.level - 1) + this.combat.polymorph + 60 - sumKeys(this.attributes) + ((this.talents.BiggerAndBetter) ? 2 : 0),
@@ -116,6 +144,85 @@ let character = {
             civil: 1 + Math.floor((this.level / 4)) - sumKeys(this.civil) + ((this.talents.AllSkilledUp) ? 1 : 0),
             talents: 1 + Math.floor((this.level + 2) / 5) - sumBool(this.talents)
         };
+    },
+    getHealth() {
+        const baseHealth = getBaseHealth(this.level);
+        const vitFromConstitution = (this.talents.LoneWolf) ? (this.attributes.constitution - 10) * 14 : (this.attributes.constitution - 10) * 7;
+        const otherVit = ((this.talents.PictureofHealth) ? ((this.talents.LoneWolf) ? this.combat.warfare * 6 : this.combat.warfare * 3) : 0) + (this.racialTalents.DwarvenGuile) ? 10 : 0;
+        return baseHealth * (1 + (vitFromConstitution + otherVit) / 100);
+    },
+    getArmor() {
+        return {
+            phArmor: (this.talents.LoneWolf) ? 30 : 0,
+            mArmor: (this.talents.LoneWolf) ? 30 : 0,
+            restorePhArmor: (this.talents.LoneWolf) ? this.combat.geomancer * 10 : this.combat.geomancer * 5,
+            restoreMArmor: (this.talents.LoneWolf) ? this.combat.hydrosophist * 10 : this.combat.hydrosophist * 5,
+            restoreArmorFromStatus: (this.talents.LoneWolf) ? this.combat.perseverance * 10 : this.combat.perseverance * 5
+        }
+    },
+    getDamage() {
+        return {
+            strDmg: (this.talents.LoneWolf) ? this.attributes.strength * 10 : this.attributes.strength * 5,
+            physDmg: (this.talents.LoneWolf) ? this.combat.warfare * 10 : this.combat.warfare * 5,
+            SHDmg: (this.talents.LoneWolf) ? this.combat.singlehanded * 10 : this.combat.singlehanded * 5,
+            THDmg: (this.talents.LoneWolf) ? this.combat.twohanded * 10 : this.combat.twohanded * 5,
+            finDng: (this.talents.LoneWolf) ? this.attributes.finesse * 10 : this.attributes.finesse * 5,
+            DWDmg: (this.talents.LoneWolf) ? this.combat.dualWielding * 10 : this.combat.dualWielding * 5,
+            RangedDmg: (this.talents.LoneWolf) ? this.combat.ranged * 10 : this.combat.ranged * 5,
+            SneakDmg: (this.talents.Guerilla) ? 40 : 0,
+            intDmg: (this.talents.LoneWolf) ? this.attributes.intelligence * 10 : this.attributes.intelligence * 5,
+            PoisonDmg: (this.talents.LoneWolf) ? this.combat.geomancer * 10 : this.combat.geomancer * 5,
+            FireDmg: (this.talents.LoneWolf) ? this.combat.pyrokinetic * 10 : this.combat.pyrokinetic * 5,
+            reflectDmg: (this.talents.LoneWolf) ? this.combat.retribution * 10 : this.combat.retribution * 5,
+            MADmg: (this.talents.LoneWolf) ? this.combat.aerothurge * 10 : this.combat.aerothurge * 5,
+            HGDmg: (this.talents.LoneWolf) ? this.combat.huntsman * 10 : this.combat.huntsman * 5,
+            SummonDmg: (this.talents.LoneWolf) ? this.combat.summoning * 10 : this.combat.summoning * 5
+        }
+    },
+    getCritical() {
+        return {
+            critChance: ((this.talents.LoneWolf) ? (this.attributes.wits - 10 ) * 2 : this.attributes.wits - 10) + (this.racialTalents.Ingenious) ? 5 : 0,
+            rangedCritChance: (this.talents.LoneWolf) ? this.combat.huntsman * 2 : this.combat.huntsman,
+            critChanceFullHP: (this.talents.Hothead) ? 10 : 0,
+            critChanceMultiplier: 150 + (this.talents.LoneWolf) ? this.combat.scoundrel * 10 : this.combat.scoundrel * 5,
+            THCritChanceMultiplier: (this.talents.LoneWolf) ? this.combat.twohanded * 10 : this.combat.twohanded * 5
+        }
+    },
+    getAccuracy() {
+        return {
+            baseAcc: 95,
+            SHAcc: (this.talents.LoneWolf) ? this.combat.singlehanded * 10 : this.combat.singlehanded * 5,
+            FullHPAcc: (this.talents.Hothead) ? 10 : 0
+        }
+    },
+    getDefences() {
+        return {
+            dodge: 1,
+            necroHealing: (this.talents.LoneWolf) ? this.combat.necromancer * 20 : this.combat.necromancer * 10,
+            healingIncrease: (this.talents.LoneWolf) ? this.combat.hydrosophist * 10 : this.combat.hydrosophist * 5
+        }
+    },
+    getResistances() {
+        const allResist = (this.talents.LoneWolf) ? this.combat.leadership * 6 : this.combat.leader * 3;
+        return {
+            fire: allResist + ((this.racialTalents.Sophisticated) ? 10 : 0) + ((this.talents.Demon) ? 15 : 0) - ((this.talents.Ice_King) ? 15 : 0),
+            water: allResist + ((this.talents.Ice_King) ? 10 : 0) - ((this.talents.Demon) ? 15 : 0),
+            earth: allResist,
+            air: allResist,
+            poison: allResist + (this.racialTalents.Sophisticated) ? 10 : 0
+        }
+    },
+    getOtherStats() {
+        return {
+            initiative: (this.talents.LoneWolf) ? this.attributes.wits * 2 : this.attributes.wits,
+            memorySlots: 1,
+            moveSpeed: 1,
+            maxAP: 1,
+            startAP: 1,
+            turnAP: 1,
+            moveWEight: 1,
+            carryWeigh: 1
+        }
     },
     levelUp() {
         (this.level < 20) ? this.level += 1 : null
