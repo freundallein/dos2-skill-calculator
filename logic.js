@@ -149,7 +149,7 @@ let character = {
         const baseHealth = getBaseHealth(this.level);
         const vitFromConstitution = (this.talents.LoneWolf) ? (this.attributes.constitution - 10) * 14 : (this.attributes.constitution - 10) * 7;
         const otherVit = ((this.talents.PictureofHealth) ? ((this.talents.LoneWolf) ? this.combat.warfare * 6 : this.combat.warfare * 3) : 0) + (this.racialTalents.DwarvenGuile) ? 10 : 0;
-        return baseHealth * (1 + (vitFromConstitution + otherVit) / 100);
+        return Math.floor(baseHealth * (1 + (vitFromConstitution + otherVit) / 100));
     },
     getArmor() {
         return {
@@ -231,7 +231,62 @@ let character = {
         (this.level > 1) ? this.level -= 1 : null
     },
     switchTalent(name) {
-        this.talents[name] = !this.talents[name];
+        switch (name) {
+            case 'LoneWolf':
+                if (!this.talents.GlassCannon) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'GlassCannon':
+                if (!this.talents.LoneWolf) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'BiggerAndBetter':
+            case 'AllSkilledUp':
+                if (this.level >= 2) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'Demon':
+                if (!this.talents.Ice_King && this.combat.pyrokinetic > 0) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'Ice_King':
+                if (!this.talents.Demon && this.combat.hydrosophist > 0) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'ElementalRanger':
+            case 'DuckDuckGoose':
+                if (this.combat.huntsman > 0) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'Executioner':
+                if (!this.talents.ThePawn) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'ThePawn':
+                if (!this.talents.Executioner && this.combat.scoundrel > 0) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'PictureofHealth':
+                if (this.combat.warfare > 0) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            case 'Guerilla':
+                if (this.combat.sneaking > 0) {
+                    this.talents[name] = !this.talents[name];
+                }
+                break;
+            default:
+                this.talents[name] = !this.talents[name];
+        }
     },
     switchRacialTalent(name) {
         this.racialTalents[name] = !this.racialTalents[name];
@@ -243,8 +298,6 @@ let character = {
                 max = 30;
                 break;
             case 'combat':
-                max = 10;
-                break;
             case 'civil':
                 max = 10;
                 break;

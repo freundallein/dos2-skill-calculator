@@ -119,8 +119,7 @@ export default class App extends React.Component {
                     style={{flex: 1}}
                     indicator={
                         <PagerTitleIndicator
-                            titles={['Attributes', 'Combat' +
-                            ' Abilities', 'Civil Abilities', 'Talents']}
+                            titles={['Attributes', 'Combat', 'Civil', 'Talents', 'Summary']}
                         />}>
                     <View style={{backgroundColor: 'cadetblue'}}>
                         <Text>Attributes</Text>
@@ -149,25 +148,53 @@ export default class App extends React.Component {
                             renderItem={({item}) => this.renderPlan(item, 'civil')}
                         />
                     </View>
-                    <View style={{backgroundColor: 'red'}}>
+                    <View style={{backgroundColor: 'white'}}>
                         <Text>Talents</Text>
                         <Text>Available points
                             -> {this.state.char.getPoints().talents}</Text>
                         <FlatList
                             data={talents}
                             renderItem={({item}) => {
-                                return <View key={item.key}><Text>{item.key}
-                                    --> {(item.value) ? 1 : 0}</Text>
-                                    <Button title={"?"}
+                                return <View key={item.key} style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    <View style={{flex: .5}}>
+                                        <Text>{item.key}</Text>
+                                    </View>
+                                    <View style={{flex: .5}}>
+                                        <Button
+                                            title={(item.value) ? 'Yes' : 'No'}
                                             onPress={() => {
                                                 let char = this.state.char;
                                                 char.switchTalent(item.key);
                                                 this.setState({char: char})
                                             }
                                             }/>
-                                </View>
+                                    </View></View>
                             }}
                         />
+                    </View>
+                    <View style={{backgroundColor: 'red'}}>
+                        <Text>Summary</Text>
+                        <Text>Health -> {this.state.char.getHealth()}</Text>
+                        <Text>
+                            Physical Armor
+                            -> {this.state.char.getArmor().phArmor} |
+                            Magical Armor
+                            -> {this.state.char.getArmor().mArmor}
+                        </Text>
+                        <Text>
+                            Restore Physical Armor
+                            -> {this.state.char.getArmor().restorePhArmor} |
+                            Restore Magical Armor
+                            -> {this.state.char.getArmor().restoreMArmor}
+                        </Text>
+                        <Text>Restore Armor from status
+                            -> {this.state.char.getArmor().restoreArmorFromStatus}</Text>
+                        <Text>
+                            Under construction.
+                        </Text>
                     </View>
                 </IndicatorViewPager>
             </View>
