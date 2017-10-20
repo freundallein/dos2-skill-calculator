@@ -6,19 +6,31 @@ import {
     Button,
     Picker,
     Switch,
-    FlatList
+    FlatList,
+    Modal
 } from 'react-native';
 import {
     IndicatorViewPager,
     PagerTitleIndicator
 } from 'rn-viewpager';
+
 import character, {mapObject} from './logic';
-import getName from './text_namer';
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {char: character};
+        this.state = {
+            char: character,
+            modal: false,
+            description: 'Test'
+        };
+    }
+
+    showDescription(visible, description) {
+        this.setState({
+            modal: visible,
+            description: description
+        });
     }
 
     renderPlan(item, plan) {
@@ -28,7 +40,12 @@ export default class App extends React.Component {
             marginTop: 5
         }}>
             <View style={{flex: .6}}>
-                <Text style={styles.text}>{getName(item.key)}</Text>
+                <Text style={styles.text}
+                      onPress={() => {
+                          this.showDescription(!this.state.modal, item.description)
+                      }}>
+                    {item.name}
+                </Text>
             </View>
             <View style={{flex: .1}}>
                 <Button title={"-"}
@@ -58,12 +75,27 @@ export default class App extends React.Component {
         </View>
     };
 
+    renderSummary(item) {
+        return <View key={item.key} style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 5
+        }}>
+            <View style={{flex: .5}}>
+                <Text style={styles.text}>{item.name}</Text>
+            </View>
+            <View style={{flex: .5}}>
+                <Text style={styles.text}>{item.value}</Text>
+            </View>
+        </View>
+    }
+
     render() {
         const attributes = mapObject(this.state.char.attributes);
         const combat = mapObject(this.state.char.combat);
         const civil = mapObject(this.state.char.civil);
         const talents = mapObject(this.state.char.talents);
-
+        const summary = mapObject(this.state.char.getSummary());
         return (
             <View style={{flex: 1, paddingTop: 20, backgroundColor: 'white'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -73,7 +105,7 @@ export default class App extends React.Component {
                     <View style={{flex: .5}}>
                         <Picker
                             selectedValue={this.state.char.race}
-                            onValueChange={(value, itemIndex) => {
+                            onValueChange={(value) => {
                                 let char = this.state.char;
                                 char.setRace(value);
                                 this.setState({char: char})
@@ -186,7 +218,7 @@ export default class App extends React.Component {
                                 }}>
                                     <View style={{flex: .7}}>
                                         <Text style={styles.text}>
-                                            {getName(item.key)}
+                                            {item.name}
                                         </Text>
                                     </View>
                                     <View style={{flex: .2}}>
@@ -204,60 +236,42 @@ export default class App extends React.Component {
                         />
                     </View>
                     <View style={styles.page}>
-                        <Text>Health {this.state.char.getHealth()}</Text>
-                        <Text>Armor</Text>
-                        <Text>
-                            Physical Armor {this.state.char.getArmor().phArmor}
-                            % Restore Physical
-                            Armor {this.state.char.getArmor().restorePhArmor} %
-                        </Text>
-                        <Text>
-                            Magical Armor {this.state.char.getArmor().mArmor}
-                            % Restore Magical
-                            Armor {this.state.char.getArmor().restoreMArmor} %
-                        </Text>
-                        <Text>
-                            Restore Armor from
-                            status {this.state.char.getArmor().restoreArmorFromStatus}
-                            %
-                        </Text>
-                        <Text>Damage</Text>
-                        <Text>
-                            Strength based
-                            Damage {this.state.char.getDamage().strDmg} %
-                            Physical
-                            Damage {this.state.char.getDamage().physDmg} %
-                        </Text>
-                        <Text>Single-handed
-                            Damage {this.state.char.getDamage().SHDmg} %
-                            Two-handed
-                            Damage {this.state.char.getDamage().THDmg} %
-                        </Text>
-                        <Text>
-                            Finesse based
-                            Damage {this.state.char.getDamage().finDmg} %
-                            Dual wielding
-                            Damage {this.state.char.getDamage().DWDmg} %
-                        </Text>
-                        <Text>Ranged
-                            Damage {this.state.char.getDamage().SHDmg} %
-                            Sneaking
-                            Damage {this.state.char.getDamage().THDmg} %
-                        </Text>
-                        <Text>
-                            Intelligence based
-                            Damage {this.state.char.getDamage().intDmg} %
-                        </Text>
-                        <Text>Poison
-                            Damage {this.state.char.getDamage().PoisonDmg} %
-                            Fire
-                            Damage {this.state.char.getDamage().FireDmg} %
-                        </Text>
-                        <Text>
-                            Under construction.
-                        </Text>
+                        <FlatList
+                            data={summary}
+                            renderItem={({item}) => this.renderSummary(item)}
+                        />
                     </View>
                 </IndicatorViewPager>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={this.state.modal}
+                    onRequestClose={() => {
+                        this.showDescription(!this.state.modal)
+                    }}
+                >
+                    <View style={{
+                        position: 'absolute',
+                        bottom: -300,
+                        left: 0,
+                        right: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <View style={{
+                            width: 300,
+                            height: 500,
+                            opacity: 0.8
+                        }}>
+                            <Text style={styles.modalContent}
+                                  onPress={() => {
+                                      this.showDescription(!this.state.modal)
+                                  }}>
+                                {this.state.description}
+                            </Text>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
@@ -280,5 +294,14 @@ const styles = StyleSheet.create({
         margin: 5,
         textAlign: 'center',
         fontSize: 18
-    }
+    },
+    modalContent: {
+        backgroundColor: 'gray',
+        padding: 10,
+        color: "white",
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
 });

@@ -66,8 +66,65 @@ const namespace = {
         Unstable: 'Unstable',
         WalkItOff: 'Walk it off',
         WhatARush: 'What a rush',
+
+        health: 'Health',
+
+        phArmor: 'Physical Armor',
+        mArmor: 'Magic Armor',
+        restorePhArmor: 'Physical Armor restoration',
+        restoreMArmor: 'Magic armor restoration',
+        restoreArmorFromStatus: 'Armor restored by status',
+
+        strDmg: 'Strength damage',
+        physDmg: 'Physical damage',
+        SHDmg: 'Single-handed damage',
+        THDmg: 'Two-handed damage',
+        finDmg: 'Finesse damage',
+        DWDmg: 'Dual wielding damage',
+        RangedDmg: 'Ranged damage',
+        SneakDmg: 'Sneaking damage',
+        intDmg: 'Intelligence damage',
+        PoisonDmg: 'Poison damage',
+        FireDmg: 'Fire damage',
+        reflectDmg: 'Retribution reflect damage',
+        MADmg: 'Magic Armor damage',
+        HGDmg: 'Damage from high ground',
+        SummonDmg: 'Summoning damage',
+
+        critChance: 'Critical chance',
+        rangedCritChance: 'Ranged critical chance',
+        critChanceFullHP: 'Critical chance at Full Health',
+        critChanceMultiplier: 'Critical strike damage multiplier',
+        THCritChanceMultiplier: 'Two-handed crit damage multiplier',
+
+        baseAcc: 'Base accuracy',
+        SHAcc: 'Single-handed accuracy',
+        FullHPAcc: 'Accuracy at Full Health',
+
+        dodge: 'Dodge',
+        necroHealing: 'Healing from Necromancer',
+        healingIncrease: 'Healing increase',
+
+        fire: 'Fire resistance',
+        water: 'Water resistance',
+        earth: 'Earth resistance',
+        air: 'Air resistance',
+        poison: 'Poison resistance',
+
+        initiative: 'Initiative',
+        memorySlots: 'Memory slots',
+        moveSpeed: 'Move speed',
+        maxAP: 'Max action points',
+        startAP: 'Start turn action points',
+        turnAP: 'Each turn action points',
+        moveWeight: 'Move weight',
+        carryWeight: 'Carry weight'
 };
-const getName = (key) => {
+export const getName = (key) => {
     return namespace[key]
+};
+export const getDescription = (key) => {
+        return 'asfasfasf ldsanasdfnew asdfnsakjdnfkasjdnfkasjdnf as' +
+            ' nfkajsdnfkjasdn jkans asd fnkajsdfn kjans'
 };
 export default getName;

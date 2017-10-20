@@ -1,3 +1,5 @@
+import {getName, getDescription} from './namespace';
+
 const sumKeys = (obj) => {
     return Object.keys(obj)
         .reduce(function (sum, key) {
@@ -18,7 +20,9 @@ export const mapObject = (object) => {
     return Object.keys(object).map(function (key) {
         return {
             key: key,
-            value: object[key]
+            name: getName(key),
+            value: object[key],
+            description: getDescription(key)
         }
     });
 };
@@ -145,23 +149,20 @@ let character = {
             talents: 1 + Math.floor((this.level + 2) / 5) - sumBool(this.talents)
         };
     },
-    getHealth() {
+    getSummary() {
         const baseHealth = getBaseHealth(this.level);
         const vitFromConstitution = (this.talents.LoneWolf) ? (this.attributes.constitution - 10) * 14 : (this.attributes.constitution - 10) * 7;
         const otherVit = ((this.talents.PictureofHealth) ? ((this.talents.LoneWolf) ? this.combat.warfare * 6 : this.combat.warfare * 3) : 0) + (this.racialTalents.DwarvenGuile) ? 10 : 0;
-        return Math.floor(baseHealth * (1 + (vitFromConstitution + otherVit) / 100));
-    },
-    getArmor() {
+        const allResist = (this.talents.LoneWolf) ? this.combat.leadership * 6 : this.combat.leadership * 3;
         return {
+            health: Math.floor(baseHealth * (1 + (vitFromConstitution + otherVit) / 100)),
+
             phArmor: (this.talents.LoneWolf) ? 30 : 0,
             mArmor: (this.talents.LoneWolf) ? 30 : 0,
             restorePhArmor: (this.talents.LoneWolf) ? this.combat.geomancer * 10 : this.combat.geomancer * 5,
             restoreMArmor: (this.talents.LoneWolf) ? this.combat.hydrosophist * 10 : this.combat.hydrosophist * 5,
-            restoreArmorFromStatus: (this.talents.LoneWolf) ? this.combat.perseverance * 10 : this.combat.perseverance * 5
-        }
-    },
-    getDamage() {
-        return {
+            restoreArmorFromStatus: (this.talents.LoneWolf) ? this.combat.perseverance * 10 : this.combat.perseverance * 5,
+
             strDmg: (this.talents.LoneWolf) ? this.attributes.strength * 10 : this.attributes.strength * 5,
             physDmg: (this.talents.LoneWolf) ? this.combat.warfare * 10 : this.combat.warfare * 5,
             SHDmg: (this.talents.LoneWolf) ? this.combat.singlehanded * 10 : this.combat.singlehanded * 5,
@@ -176,52 +177,36 @@ let character = {
             reflectDmg: (this.talents.LoneWolf) ? this.combat.retribution * 10 : this.combat.retribution * 5,
             MADmg: (this.talents.LoneWolf) ? this.combat.aerothurge * 10 : this.combat.aerothurge * 5,
             HGDmg: (this.talents.LoneWolf) ? this.combat.huntsman * 10 : this.combat.huntsman * 5,
-            SummonDmg: (this.talents.LoneWolf) ? this.combat.summoning * 10 : this.combat.summoning * 5
-        }
-    },
-    getCritical() {
-        return {
+            SummonDmg: (this.talents.LoneWolf) ? this.combat.summoning * 10 : this.combat.summoning * 5,
+
             critChance: ((this.talents.LoneWolf) ? (this.attributes.wits - 10 ) * 2 : this.attributes.wits - 10) + (this.racialTalents.Ingenious) ? 5 : 0,
             rangedCritChance: (this.talents.LoneWolf) ? this.combat.huntsman * 2 : this.combat.huntsman,
             critChanceFullHP: (this.talents.Hothead) ? 10 : 0,
             critChanceMultiplier: 150 + (this.talents.LoneWolf) ? this.combat.scoundrel * 10 : this.combat.scoundrel * 5,
-            THCritChanceMultiplier: (this.talents.LoneWolf) ? this.combat.twohanded * 10 : this.combat.twohanded * 5
-        }
-    },
-    getAccuracy() {
-        return {
+            THCritChanceMultiplier: (this.talents.LoneWolf) ? this.combat.twohanded * 10 : this.combat.twohanded * 5,
+
             baseAcc: 95,
             SHAcc: (this.talents.LoneWolf) ? this.combat.singlehanded * 10 : this.combat.singlehanded * 5,
-            FullHPAcc: (this.talents.Hothead) ? 10 : 0
-        }
-    },
-    getDefences() {
-        return {
-            dodge: 1,
+            FullHPAcc: (this.talents.Hothead) ? 10 : 0,
+
+            dodge: ((this.talents.LoneWolf) ? (this.combat.dualWielding + this.combat.leadership) * 2 : (this.combat.dualWielding + this.combat.leadership)) + ((this.talents.ParryMaster) ? 10 : 0) + ((this.racialTalents.DwarvenGuile) ? 5 : 0),
             necroHealing: (this.talents.LoneWolf) ? this.combat.necromancer * 20 : this.combat.necromancer * 10,
-            healingIncrease: (this.talents.LoneWolf) ? this.combat.hydrosophist * 10 : this.combat.hydrosophist * 5
-        }
-    },
-    getResistances() {
-        const allResist = (this.talents.LoneWolf) ? this.combat.leadership * 6 : this.combat.leader * 3;
-        return {
+            healingIncrease: (this.talents.LoneWolf) ? this.combat.hydrosophist * 10 : this.combat.hydrosophist * 5,
+
             fire: allResist + ((this.racialTalents.Sophisticated) ? 10 : 0) + ((this.talents.Demon) ? 15 : 0) - ((this.talents.Ice_King) ? 15 : 0),
             water: allResist + ((this.talents.Ice_King) ? 10 : 0) - ((this.talents.Demon) ? 15 : 0),
             earth: allResist,
             air: allResist,
-            poison: allResist + (this.racialTalents.Sophisticated) ? 10 : 0
-        }
-    },
-    getOtherStats() {
-        return {
+            poison: allResist + (this.racialTalents.Sophisticated) ? 10 : 0,
+
             initiative: (this.talents.LoneWolf) ? this.attributes.wits * 2 : this.attributes.wits,
-            memorySlots: 1,
-            moveSpeed: 1,
-            maxAP: 1,
-            startAP: 1,
-            turnAP: 1,
-            moveWEight: 1,
-            carryWeigh: 1
+            memorySlots: (this.talents.LoneWolf) ? this.attributes.memory * 2 : this.attributes.memory,
+            moveSpeed: 5 + ((this.talents.LoneWolf) ? this.combat.scoundrel * 0.6 : this.combat.scoundrel * 0.3),
+            maxAP: 6 + ((this.talents.LoneWolf) ? 2 : 0),
+            startAP: (this.talents.GlassCannon) ? (6 + ((this.talents.LoneWolf) ? 2 : 0)) : 4,
+            turnAP: (this.talents.GlassCannon) ? (6 + ((this.talents.LoneWolf) ? 2 : 0)) : ((this.talents.LoneWolf) ? 6 : 4),
+            moveWeight: Math.floor((this.talents.LoneWolf) ? this.attributes.strength * 15 : this.attributes.strength * 7.5),
+            carryWeight: (this.talents.LoneWolf) ? this.attributes.strength * 20 : this.attributes.strength * 10
         }
     },
     levelUp() {
