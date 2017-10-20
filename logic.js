@@ -166,7 +166,7 @@ let character = {
             physDmg: (this.talents.LoneWolf) ? this.combat.warfare * 10 : this.combat.warfare * 5,
             SHDmg: (this.talents.LoneWolf) ? this.combat.singlehanded * 10 : this.combat.singlehanded * 5,
             THDmg: (this.talents.LoneWolf) ? this.combat.twohanded * 10 : this.combat.twohanded * 5,
-            finDng: (this.talents.LoneWolf) ? this.attributes.finesse * 10 : this.attributes.finesse * 5,
+            finDmg: (this.talents.LoneWolf) ? this.attributes.finesse * 10 : this.attributes.finesse * 5,
             DWDmg: (this.talents.LoneWolf) ? this.combat.dualWielding * 10 : this.combat.dualWielding * 5,
             RangedDmg: (this.talents.LoneWolf) ? this.combat.ranged * 10 : this.combat.ranged * 5,
             SneakDmg: (this.talents.Guerilla) ? 40 : 0,
