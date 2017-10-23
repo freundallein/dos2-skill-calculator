@@ -49,7 +49,7 @@ export default class App extends React.Component {
             </View>
             <View style={{flex: .1}}>
                 <Button title={"-"}
-                        color={"grey"}
+                        color={"#3b1b1e"}
                         onPress={() => {
                             let char = this.state.char;
                             char.setDown(plan, item.key);
@@ -63,7 +63,7 @@ export default class App extends React.Component {
             </View>
             <View style={{flex: .1}}>
                 <Button title={"+"}
-                        color={"grey"}
+                        color={"#3b1b1e"}
                         onPress={() => {
                             let char = this.state.char;
                             char.setUp(plan, item.key);
@@ -97,7 +97,8 @@ export default class App extends React.Component {
         const talents = mapObject(this.state.char.talents);
         const summary = mapObject(this.state.char.getSummary());
         return (
-            <View style={{flex: 1, paddingTop: 20, backgroundColor: 'white'}}>
+            <View
+                style={{flex: 1, paddingTop: 20, backgroundColor: '#aea69b'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View style={{flex: .5}}>
                         <Text style={styles.header}>Race</Text>
@@ -144,7 +145,7 @@ export default class App extends React.Component {
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View style={{flex: .3}}>
                         <Button title={"-"}
-                                color={"grey"}
+                                color={"#3b1b1e"}
                                 onPress={() => {
                                     let char = this.state.char;
                                     char.levelDown();
@@ -159,7 +160,7 @@ export default class App extends React.Component {
                     </View>
                     <View style={{flex: .3}}>
                         <Button title={"+"}
-                                color={"grey"}
+                                color={"#3b1b1e"}
                                 onPress={() => {
                                     let char = this.state.char;
                                     char.levelUp();
@@ -279,13 +280,15 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
+        color: '#532025'
     },
     header: {
         textAlign: 'center',
-        fontSize: 16
+        fontSize: 16,
+        color: '#532025'
     },
     page: {
-        backgroundColor: 'white'
+        backgroundColor: '#aea69b'
     },
     button: {
         padding: "5px"
@@ -293,7 +296,8 @@ const styles = StyleSheet.create({
     points: {
         margin: 5,
         textAlign: 'center',
-        fontSize: 18
+        fontSize: 18,
+        color: '#532025'
     },
     modalContent: {
         backgroundColor: 'gray',
