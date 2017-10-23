@@ -179,10 +179,10 @@ let character = {
             HGDmg: (this.talents.LoneWolf) ? this.combat.huntsman * 10 : this.combat.huntsman * 5,
             SummonDmg: (this.talents.LoneWolf) ? this.combat.summoning * 10 : this.combat.summoning * 5,
 
-            critChance: ((this.talents.LoneWolf) ? (this.attributes.wits - 10 ) * 2 : this.attributes.wits - 10) + (this.racialTalents.Ingenious) ? 5 : 0,
+            critChance: ((this.talents.LoneWolf) ? (this.attributes.wits - 10 ) * 2 : this.attributes.wits - 10) + ((this.racialTalents.Ingenious) ? 5 : 0),
             rangedCritChance: (this.talents.LoneWolf) ? this.combat.huntsman * 2 : this.combat.huntsman,
             critChanceFullHP: (this.talents.Hothead) ? 10 : 0,
-            critChanceMultiplier: 150 + (this.talents.LoneWolf) ? this.combat.scoundrel * 10 : this.combat.scoundrel * 5,
+            critChanceMultiplier: 150 + ((this.talents.LoneWolf) ? this.combat.scoundrel * 10 : this.combat.scoundrel * 5),
             THCritChanceMultiplier: (this.talents.LoneWolf) ? this.combat.twohanded * 10 : this.combat.twohanded * 5,
 
             baseAcc: 95,

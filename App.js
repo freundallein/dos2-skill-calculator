@@ -4,8 +4,6 @@ import {
     Text,
     View,
     Button,
-    Picker,
-    Switch,
     FlatList,
     Modal
 } from 'react-native';
@@ -15,6 +13,9 @@ import {
 } from 'rn-viewpager';
 
 import character, {mapObject} from './logic';
+import Level from './components/Level';
+import RacePicker from './components/RacePicker';
+import Tooltip from "./components/Tooltip";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -49,7 +50,7 @@ export default class App extends React.Component {
             </View>
             <View style={{flex: .1}}>
                 <Button title={"-"}
-                        color={"#3b1b1e"}
+                        color={buttonColor}
                         onPress={() => {
                             let char = this.state.char;
                             char.setDown(plan, item.key);
@@ -63,7 +64,7 @@ export default class App extends React.Component {
             </View>
             <View style={{flex: .1}}>
                 <Button title={"+"}
-                        color={"#3b1b1e"}
+                        color={buttonColor}
                         onPress={() => {
                             let char = this.state.char;
                             char.setUp(plan, item.key);
@@ -99,81 +100,36 @@ export default class App extends React.Component {
         return (
             <View
                 style={{flex: 1, paddingTop: 20, backgroundColor: '#aea69b'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View style={{flex: .5}}>
-                        <Text style={styles.header}>Race</Text>
-                    </View>
-                    <View style={{flex: .5}}>
-                        <Picker
-                            selectedValue={this.state.char.race}
-                            onValueChange={(value) => {
+                <RacePicker race={this.state.char.race}
+                            changeRace={(value) => {
                                 let char = this.state.char;
                                 char.setRace(value);
                                 this.setState({char: char})
-                            }}>
-                            <Picker.Item label="Human" value="human"/>
-                            <Picker.Item label="Elf" value="elf"/>
-                            <Picker.Item label="Dwarf" value="dwarf"/>
-                            <Picker.Item label="Lizard" value="lizard"/>
-                            <Picker.Item label="Undead Human"
-                                         value="undead_human"/>
-                            <Picker.Item label="Undead Elf"
-                                         value="undead_elf"/>
-                            <Picker.Item label="Undead Dwarf"
-                                         value="undead_dwarf"/>
-                            <Picker.Item label="Undead Lizard"
-                                         value="undead_lizard"/>
-                        </Picker>
-                    </View>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View style={{flex: .5}}>
-                        <Text
-                            style={styles.header}>{this.state.char.gender ? 'Male' : 'Female'}</Text>
-                    </View>
-                    <View style={{flex: .4}}>
-                        <Switch
-                            onValueChange={(value) => {
-                                let char = this.state.char;
-                                char.gender = value;
-                                this.setState({char: char})
-                            }
-                            }
-                            value={this.state.char.gender}/>
-                    </View>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <View style={{flex: .3}}>
-                        <Button title={"-"}
-                                color={"#3b1b1e"}
-                                onPress={() => {
-                                    let char = this.state.char;
-                                    char.levelDown();
-                                    this.setState({char: char})
-                                }
-                                }/>
-                    </View>
-                    <View style={{flex: .4}}>
-                        <Text style={styles.header}>
-                            Level {this.state.char.level}
-                        </Text>
-                    </View>
-                    <View style={{flex: .3}}>
-                        <Button title={"+"}
-                                color={"#3b1b1e"}
-                                onPress={() => {
-                                    let char = this.state.char;
-                                    char.levelUp();
-                                    this.setState({char: char})
-                                }
-                                }
-                        />
-                    </View>
-                </View>
+                            }}
+                            styles={styles}
+                />
+                <Level level={this.state.char.level}
+                       increase={() => {
+                           let char = this.state.char;
+                           char.levelUp();
+                           this.setState({char: char})
+                       }}
+                       decrease={() => {
+                           let char = this.state.char;
+                           char.levelDown();
+                           this.setState({char: char})
+                       }}
+                       buttonColor={buttonColor}
+                       styles={styles}
+                />
                 <IndicatorViewPager
                     style={{flex: 1}}
                     indicator={
                         <PagerTitleIndicator
+                            itemStyle={styles.itemStyle}
+                            itemTextStyle={styles.itemTextStyle}
+                            selectedItemStyle={styles.selectedItemStyle}
+                            selectedItemTextStyle={styles.selectedItemTextStyle}
                             titles={
                                 ['Attributes',
                                     'Combat',
@@ -228,7 +184,7 @@ export default class App extends React.Component {
                                     <View style={{flex: .2}}>
                                         <Button
                                             title={(item.value) ? 'Refuse' : 'Take'}
-                                            color={"#3b1b1eы"}
+                                            color={buttonColor}
                                             onPress={() => {
                                                 let char = this.state.char;
                                                 char.switchTalent(item.key);
@@ -246,40 +202,19 @@ export default class App extends React.Component {
                         />
                     </View>
                 </IndicatorViewPager>
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={this.state.modal}
-                    onRequestClose={() => {
-                        this.showDescription(!this.state.modal)
-                    }}
-                >
-                    <View style={{
-                        position: 'absolute',
-                        bottom: -300,
-                        left: 0,
-                        right: 0,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        <View style={{
-                            width: 300,
-                            height: 500,
-                            opacity: 0.8
-                        }}>
-                            <Text style={styles.modalContent}
-                                  onPress={() => {
-                                      this.showDescription(!this.state.modal)
-                                  }}>
-                                {this.state.description}
-                            </Text>
-                        </View>
-                    </View>
-                </Modal>
+                <Tooltip visible={this.state.modal}
+                         showDescription={() => {
+                             this.showDescription(!this.state.modal)
+                         }}
+                         description={this.state.description}
+                         styles={styles}
+                />
             </View>
         );
     }
 }
+
+const buttonColor = "#3b1b1e";
 const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
@@ -311,4 +246,16 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
+    itemStyle: {
+        backgroundColor: '#532025'
+    },
+    itemTextStyle: {
+        color: '#aea69b'
+    },
+    selectedItemStyle: {
+        backgroundColor: '#aea69b'
+    },
+    selectedItemTextStyle: {
+        color: '#532025'
+    }
 });
