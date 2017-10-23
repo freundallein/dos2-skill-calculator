@@ -218,14 +218,17 @@ export default class App extends React.Component {
                                     marginTop: 5
                                 }}>
                                     <View style={{flex: .7}}>
-                                        <Text style={styles.text}>
+                                        <Text style={styles.text}
+                                              onPress={() => {
+                                                  this.showDescription(!this.state.modal, item.description)
+                                              }}>
                                             {item.name}
                                         </Text>
                                     </View>
                                     <View style={{flex: .2}}>
                                         <Button
                                             title={(item.value) ? 'Refuse' : 'Take'}
-                                            color={"grey"}
+                                            color={"#3b1b1eы"}
                                             onPress={() => {
                                                 let char = this.state.char;
                                                 char.switchTalent(item.key);
