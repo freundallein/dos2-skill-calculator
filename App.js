@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import {
     IndicatorViewPager,
-    PagerTitleIndicator
+    //PagerTitleIndicator
+    PagerDotIndicator
 } from 'rn-viewpager';
 
 import character, {mapObject} from './logic';
@@ -125,23 +126,27 @@ export default class App extends React.Component {
                 <IndicatorViewPager
                     style={{flex: 1}}
                     indicator={
-                        <PagerTitleIndicator
-                            itemStyle={styles.itemStyle}
-                            itemTextStyle={styles.itemTextStyle}
-                            selectedItemStyle={styles.selectedItemStyle}
-                            selectedItemTextStyle={styles.selectedItemTextStyle}
-                            titles={
-                                ['Attributes',
-                                    'Combat',
-                                    'Civil',
-                                    'Talents',
-                                    'Summary']
-                            }
-                        />}>
+//                        <PagerTitleIndicator
+//                            itemStyle={styles.itemStyle}
+//                            itemTextStyle={styles.itemTextStyle}
+//                            selectedItemStyle={styles.selectedItemStyle}
+//                            selectedItemTextStyle={styles.selectedItemTextStyle}
+//                            titles={
+//                                ['Attributes',
+//                                    'Combat',
+//                                    'Civil',
+//                                    'Talents',
+//                                    'Summary']
+//                            }
+//                        />
+                        <PagerDotIndicator
+                            pageCount={5}/>
+                        }>
                     <View style={styles.page}>
                         <Text style={styles.points}>Points
                             left: {this.state.char.getPoints().attributes}</Text>
                         <FlatList
+                            removeClippedSubviews={false}
                             data={attributes}
                             renderItem={({item}) => this.renderPlan(item, 'attributes')}
                         />
@@ -150,6 +155,7 @@ export default class App extends React.Component {
                         <Text style={styles.points}>Points
                             left: {this.state.char.getPoints().combat}</Text>
                         <FlatList
+                            removeClippedSubviews={false}
                             data={combat}
                             renderItem={({item}) => this.renderPlan(item, 'combat')}
                         />
@@ -158,6 +164,7 @@ export default class App extends React.Component {
                         <Text style={styles.points}>Points
                             left: {this.state.char.getPoints().civil}</Text>
                         <FlatList
+                            removeClippedSubviews={false}
                             data={civil}
                             renderItem={({item}) => this.renderPlan(item, 'civil')}
                         />
@@ -166,6 +173,7 @@ export default class App extends React.Component {
                         <Text style={styles.points}>Points
                             left: {this.state.char.getPoints().talents}</Text>
                         <FlatList
+                            removeClippedSubviews={false}
                             data={talents}
                             renderItem={({item}) => {
                                 return <View key={item.key} style={{
@@ -197,6 +205,7 @@ export default class App extends React.Component {
                     </View>
                     <View style={styles.page}>
                         <FlatList
+                            removeClippedSubviews={false}
                             data={summary}
                             renderItem={({item}) => this.renderSummary(item)}
                         />
@@ -226,7 +235,8 @@ const styles = StyleSheet.create({
         color: '#532025'
     },
     page: {
-        backgroundColor: '#aea69b'
+        backgroundColor: '#aea69b',
+        paddingBottom: 30
     },
     button: {
         padding: "5px"
