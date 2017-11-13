@@ -11,5 +11,7 @@
     "android": {
       "package": "niella.dnuerf"
     }
-  }
+  },
+  "name": "dos2skillcalculator",
+  "displayName": "Divinity Origin Sin 2 Skill Calculator"
 }
