@@ -54,6 +54,7 @@ export const getBaseHealth = (level) => {
 };
 
 let character = {
+    error: null,
     name: null,
     race: null,
     gender: true,
@@ -210,64 +211,84 @@ let character = {
         }
     },
     levelUp() {
-        (this.level < 20) ? this.level += 1 : null
+        (this.level < 20) ? this.level += 1 : this.error = 'Max level reached'
     },
     levelDown() {
-        (this.level > 1) ? this.level -= 1 : null
+        (this.level > 1) ? this.level -= 1 : this.error = 'Min level reached'
     },
     switchTalent(name) {
         switch (name) {
             case 'LoneWolf':
                 if (!this.talents.GlassCannon) {
                     this.talents[name] = !this.talents[name];
+                } else {
+                this.error = "Can't be chosen with Glass Cannon Talent"
                 }
                 break;
             case 'GlassCannon':
                 if (!this.talents.LoneWolf) {
                     this.talents[name] = !this.talents[name];
+                } else {
+                this.error = "Can't be chosen with Lone Wolf Talent"
                 }
                 break;
             case 'BiggerAndBetter':
             case 'AllSkilledUp':
                 if (this.level >= 2) {
                     this.talents[name] = !this.talents[name];
+                } else {
+                this.error = "Need 2 level"
                 }
                 break;
             case 'Demon':
                 if (!this.talents.Ice_King && this.combat.pyrokinetic > 0) {
                     this.talents[name] = !this.talents[name];
-                }
+                } else {
+                      this.error = "Pyrokinetic skill must be above 0 and Ice King Talent mustn't to be chosen"
+                  }
                 break;
             case 'Ice_King':
                 if (!this.talents.Demon && this.combat.hydrosophist > 0) {
                     this.talents[name] = !this.talents[name];
-                }
+                } else {
+                     this.error = "Hydrosophist skill must be above 0 and Demon Talent mustn't to be chosen"
+                 }
                 break;
             case 'ElementalRanger':
             case 'DuckDuckGoose':
                 if (this.combat.huntsman > 0) {
                     this.talents[name] = !this.talents[name];
+                } else {
+                  this.error = "Huntsman skill must be above 0"
                 }
                 break;
             case 'Executioner':
                 if (!this.talents.ThePawn) {
                     this.talents[name] = !this.talents[name];
+                } else {
+                  this.error = "Can't be chosen with The Pawn Talent"
                 }
                 break;
             case 'ThePawn':
                 if (!this.talents.Executioner && this.combat.scoundrel > 0) {
                     this.talents[name] = !this.talents[name];
+                } else {
+                    this.error = "Scoundrel skill must be above 0 and Executioner Talent mustn't to be chosen"
                 }
                 break;
             case 'PictureofHealth':
                 if (this.combat.warfare > 0) {
                     this.talents[name] = !this.talents[name];
-                }
+                } else {
+                    this.error = "Warfare skill must be above 0"
+                  }
                 break;
             case 'Guerilla':
                 if (this.combat.sneaking > 0) {
                     this.talents[name] = !this.talents[name];
-                }
+                } else {
+                    this.error = "Sneaking skill must be above 0"
+                  }
                 break;
             default:
                 this.talents[name] = !this.talents[name];

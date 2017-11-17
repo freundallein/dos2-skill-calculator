@@ -8,8 +8,7 @@ import {
     Modal
 } from 'react-native';
 import {
-    IndicatorViewPager,
-    //PagerTitleIndicator
+    IndicatorViewPager
     PagerDotIndicator
 } from 'rn-viewpager';
 
@@ -126,19 +125,6 @@ export default class App extends React.Component {
                 <IndicatorViewPager
                     style={{flex: 1}}
                     indicator={
-//                        <PagerTitleIndicator
-//                            itemStyle={styles.itemStyle}
-//                            itemTextStyle={styles.itemTextStyle}
-//                            selectedItemStyle={styles.selectedItemStyle}
-//                            selectedItemTextStyle={styles.selectedItemTextStyle}
-//                            titles={
-//                                ['Attributes',
-//                                    'Combat',
-//                                    'Civil',
-//                                    'Talents',
-//                                    'Summary']
-//                            }
-//                        />
                         <PagerDotIndicator
                             pageCount={5}/>
                         }>
