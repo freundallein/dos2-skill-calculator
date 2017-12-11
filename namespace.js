@@ -335,9 +335,44 @@ const descriptions = {
         moveWeight: 'Move weight',
         carryWeight: 'Carry weight'
 };
+
+const skillGroups = {
+        dualWielding: 'weapons',
+        ranged: 'weapons',
+        singlehanded: 'weapons',
+        twohanded: 'weapons',
+
+        leadership: 'defence',
+        perseverance: 'defence',
+        retribution: 'defence',
+
+        aerothurge: 'skills',
+        geomancer: 'skills',
+        huntsman: 'skills',
+        hydrosophist: 'skills',
+        necromancer: 'skills',
+        polymorph: 'skills',
+        pyrokinetic: 'skills',
+        scoundrel: 'skills',
+        summoning: 'skills',
+        warfare: 'skills',
+
+        bartering: 'personality',
+        luckyCharm: 'personality',
+        persuasion: 'personality',
+
+        loremaster: 'craftsmanship',
+        telekinesis: 'craftsmanship',
+
+        sneaking: 'nasty',
+        thievery: 'nasty',
+}
 export const getName = (key) => {
     return namespace[key]
 };
 export const getDescription = (key) => {
-        return descriptions[key]
+    return descriptions[key]
 };
+export const getSkillGroup = (key) => {
+    return  skillGroups[key]
+}

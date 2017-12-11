@@ -5,6 +5,7 @@ import {
     View,
     Button,
     FlatList,
+    SectionList,
     Modal
 } from 'react-native';
 import {
@@ -144,6 +145,15 @@ export default class App extends React.Component {
                             removeClippedSubviews={false}
                             data={combat}
                             renderItem={({item}) => this.renderPlan(item, 'combat')}
+                        />
+                        <SectionList
+                            renderItem={({item}) => this.renderPlan(item, 'combat')}
+                            renderSectionHeader={({section}) => <Text>{section.title}</Text>}
+                            sections={[
+                              {data: [], title: 'Weapons'},
+                              {data: [], title: 'Defence'},
+                              {data: [], title: 'Skills'},
+                            ]}
                         />
                     </View>
                     <View style={styles.page}>
