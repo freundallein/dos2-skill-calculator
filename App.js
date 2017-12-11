@@ -146,15 +146,15 @@ export default class App extends React.Component {
                                 style={styles.header}>{section.title}</Text>}
                             sections={[
                                 {
-                                    data: combat.filter((item) => item.skillGroup === 'weapons'),
+                                    data: combat.filter((item) => item.group === 'weapons'),
                                     title: 'Weapons'
                                 },
                                 {
-                                    data: combat.filter((item) => item.skillGroup === 'defence'),
+                                    data: combat.filter((item) => item.group === 'defence'),
                                     title: 'Defence'
                                 },
                                 {
-                                    data: combat.filter((item) => item.skillGroup === 'skills'),
+                                    data: combat.filter((item) => item.group === 'skills'),
                                     title: 'Skills'
                                 },
                             ]}
@@ -169,15 +169,15 @@ export default class App extends React.Component {
                                 style={styles.header}>{section.title}</Text>}
                             sections={[
                                 {
-                                    data: civil.filter((item) => item.skillGroup === 'personality'),
+                                    data: civil.filter((item) => item.group === 'personality'),
                                     title: 'Personality'
                                 },
                                 {
-                                    data: civil.filter((item) => item.skillGroup === 'craftsmanship'),
+                                    data: civil.filter((item) => item.group === 'craftsmanship'),
                                     title: 'Craftsmanship'
                                 },
                                 {
-                                    data: civil.filter((item) => item.skillGroup === 'nasty'),
+                                    data: civil.filter((item) => item.group === 'nasty'),
                                     title: 'Nasty deeds'
                                 },
                             ]}
@@ -218,10 +218,52 @@ export default class App extends React.Component {
                         />
                     </View>
                     <View style={styles.page}>
-                        <FlatList
-                            removeClippedSubviews={false}
-                            data={summary}
+                        <SectionList
                             renderItem={({item}) => this.renderSummary(item)}
+                            renderSectionHeader={({section}) => <Text
+                                style={styles.header}>{section.title}</Text>}
+                            sections={[
+                                {
+                                    data: summary.filter((item) => item.group === 'base'),
+                                    title: 'Basic'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'strDmg'),
+                                    title: 'Strength-based Damage'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'finDmg'),
+                                    title: 'Finesse-based Damage'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'intDmg'),
+                                    title: 'Intelligence-based Damage'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'otherDmg'),
+                                    title: 'Other-type Damage'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'crit'),
+                                    title: 'Critical chance'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'accuracy'),
+                                    title: 'Accuracy'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'armor'),
+                                    title: 'Armor'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'otherDefence'),
+                                    title: 'Other Defences'
+                                },
+                                {
+                                    data: summary.filter((item) => item.group === 'resist'),
+                                    title: 'Resistance'
+                                },
+                            ]}
                         />
                     </View>
                 </IndicatorViewPager>

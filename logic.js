@@ -1,4 +1,4 @@
-import {getName, getDescription, getSkillGroup} from './namespace';
+import {getName, getDescription, getGroup} from './namespace';
 
 const sumKeys = (obj) => {
     return Object.keys(obj)
@@ -23,7 +23,7 @@ export const mapObject = (object) => {
             name: getName(key),
             value: object[key],
             description: getDescription(key),
-            skillGroup: getSkillGroup(key)
+            group: getGroup(key)
         }
     });
 };
