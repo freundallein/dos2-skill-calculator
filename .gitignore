@@ -1,0 +1,14 @@
+node_modules/
+.expo/
+npm-debug.*
+.idea/
+*.keyatore
+android
+ios
+*.android.js
+*.ios.js
+package-lock.json
+.bablerc
+.watchmanconfig
+.flowconfig
+package.json

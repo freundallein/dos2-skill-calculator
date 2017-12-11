@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Divinity Origin Sin 2 Skill Calculator",
+    "icon": "./imgs/icon.png",
+    "version": "1.0.0",
+    "slug": "dos2-skill-calc",
+    "sdkVersion": "23.0.0",
+    "ios": {
+      "bundleIdentifier": "niella.dnuerf"
+    },
+    "android": {
+      "package": "niella.dnuerf"
+    }
+  },
+  "name": "dos2skillcalculator",
+  "displayName": "Divinity Origin Sin 2 Skill Calculator"
+}
