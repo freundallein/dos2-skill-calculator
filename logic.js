@@ -16,13 +16,13 @@ const nullifyObjectValues = (obj) => {
     Object.keys(obj).map((key) => obj[key] = false);
 };
 
-export const mapObject = (object, lang) => {
+export const mapObject = (object, language) => {
     return Object.keys(object).map(function (key) {
         return {
             key: key,
-            name: getName(key, lang),
+            name: getName(key, language),
             value: object[key],
-            description: getDescription(key, lang),
+            description: getDescription(key, language),
             group: getGroup(key)
         }
     });
@@ -142,6 +142,15 @@ let character = {
         Sturdy: false,
         Thrifty: false,
         Undead: false,
+    },
+    updateChar(state) {
+        this.race = state.race;
+        this.level = state.level;
+        this.attributes = state.attributes;
+        this.combat = state.combat;
+        this.civil = state.civil;
+        this.talents = state.talents;
+        this.racialTalents = state.racialTalents;
     },
     getPoints() {
         return {

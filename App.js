@@ -5,7 +5,8 @@ import {
     View,
     Button,
     FlatList,
-    SectionList
+    SectionList,
+    AppState
 } from 'react-native';
 import {
     IndicatorViewPager,
@@ -26,20 +27,93 @@ import Datastore from 'react-native-local-mongodb';
 export default class App extends React.Component {
     constructor(props) {
         super(props);
+        this.db = new Datastore({
+            filename: 'asyncStorageKey',
+            autoload: true
+        });
         this.state = {
             char: character,
             modal: false,
             description: '',
-            language: 'EN'
+            language: 'EN',
+            appState: AppState.currentState
         };
-        // const db = new Datastore({
-        //     filename: 'asyncStorageKey',
-        //     autoload: true
-        // });
-        // const doc = this.state.character;
-        // db.insert(doc, function (err, newDoc) {
-        //     console.log('inserted')
-        // });
+        this.db.find({name: 'last'}, this.updateLastState('last'));
+    }
+
+    componentDidMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+    }
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+            const lastState = {
+                name: 'last',
+                language: this.state.language,
+                char: this.state.char
+            };
+            this.db.find({name: 'last'}, (err, docs) => {
+                this.db.update({name: 'last'}, lastState);
+            });
+        }
+        this.setState({appState: nextAppState});
+    };
+
+    updateLastState(slot) {
+        return (err, docs) => {
+            lastState = docs[0];
+            if (lastState === undefined) {
+                const lastState = {
+                    name: slot,
+                    language: this.state.language,
+                    char: this.state.char
+                };
+                this.db.insert(lastState)
+            } else {
+                let char = this.state.char;
+                char.updateChar(lastState.char);
+                this.setState({
+                    char: char,
+                    language: lastState.language
+                });
+            }
+        }
+    }
+
+    save(value) {
+        console.log(`Save to ${value}`);
+        this.db.find({name: value}, (err, docs) => {
+            lastState = docs[0];
+            const newSlot = {
+                name: value,
+                language: this.state.language,
+                char: this.state.char
+            };
+            if (lastState === undefined) {
+                this.db.insert(newSlot)
+            } else {
+                this.db.update({name: value}, newSlot);
+            }
+        });
+    }
+
+    load(value) {
+        console.log(`Load from ${value}`);
+        this.db.find({name: value}, (err, docs) => {
+            lastState = docs[0];
+            if (lastState !== undefined) {
+                let char = this.state.char;
+                char.updateChar(lastState.char);
+                this.setState({
+                    char: char,
+                    language: lastState.language
+                });
+            }
+        });
     }
 
     showDescription(visible, description) {
@@ -124,6 +198,8 @@ export default class App extends React.Component {
                             language: value
                         });
                     }}
+                    save={(value) => this.save(value)}
+                    load={(value) => this.load(value)}
                 />
                 <View
                     style={{

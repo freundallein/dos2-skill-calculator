@@ -9,6 +9,8 @@ class TopNavigation extends React.Component {
     render() {
         const language = this.props.language;
         const changeLanguage = this.props.changeLanguage;
+        const save = this.props.save;
+        const load = this.props.load;
         return (
             <View style={{
                 flexDirection: 'row',
@@ -21,7 +23,7 @@ class TopNavigation extends React.Component {
                     paddingLeft: 20
                 }}>
                     <Menu
-                        onSelect={(value) => console.log(`Saved to ${value}`)}>
+                        onSelect={save}>
                         <MenuTrigger>
                             <Text style={{
                                 fontSize: 14,
@@ -29,10 +31,10 @@ class TopNavigation extends React.Component {
                             }}>Save</Text>
                         </MenuTrigger>
                         <MenuOptions>
-                            <MenuOption value={'slot 1'}>
+                            <MenuOption value={'slot1'}>
                                 <Text>Slot 1</Text>
                             </MenuOption>
-                            <MenuOption value={'slot 2'}>
+                            <MenuOption value={'slot2'}>
                                 <Text>Slot 2</Text>
                             </MenuOption>
                         </MenuOptions>
@@ -43,7 +45,7 @@ class TopNavigation extends React.Component {
                     paddingLeft: 20
                 }}>
                     <Menu
-                        onSelect={(value) => console.log(`Load from ${value}`)}>
+                        onSelect={load}>
                         <MenuTrigger>
                             <Text style={{
                                 fontSize: 14,
@@ -51,10 +53,10 @@ class TopNavigation extends React.Component {
                             }}>Load</Text>
                         </MenuTrigger>
                         <MenuOptions>
-                            <MenuOption value={'slot 1'}>
+                            <MenuOption value={'slot1'}>
                                 <Text>Slot 1</Text>
                             </MenuOption>
-                            <MenuOption value={'slot 2'}>
+                            <MenuOption value={'slot2'}>
                                 <Text>Slot 2</Text>
                             </MenuOption>
                         </MenuOptions>
@@ -69,7 +71,7 @@ class TopNavigation extends React.Component {
                             <Text style={{
                                 fontSize: 14,
                                 color: 'white'
-                            }}>Lang</Text>
+                            }}>{language}</Text>
                         </MenuTrigger>
                         <MenuOptions>
                             <MenuOption value={'EN'}>
