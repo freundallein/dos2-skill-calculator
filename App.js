@@ -12,10 +12,16 @@ import {
     PagerDotIndicator
 } from 'rn-viewpager';
 
+import {MenuContext} from 'react-native-menu';
+
 import character, {mapObject} from './logic';
 import Level from './components/Level';
 import RacePicker from './components/RacePicker';
 import Tooltip from "./components/Tooltip";
+import TopNavigation from "./components/Menu";
+
+import Datastore from 'react-native-local-mongodb';
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -23,8 +29,17 @@ export default class App extends React.Component {
         this.state = {
             char: character,
             modal: false,
-            description: ''
+            description: '',
+            language: 'EN'
         };
+        // const db = new Datastore({
+        //     filename: 'asyncStorageKey',
+        //     autoload: true
+        // });
+        // const doc = this.state.character;
+        // db.insert(doc, function (err, newDoc) {
+        //     console.log('inserted')
+        // });
     }
 
     showDescription(visible, description) {
@@ -92,189 +107,204 @@ export default class App extends React.Component {
     }
 
     render() {
-        const attributes = mapObject(this.state.char.attributes);
-        const combat = mapObject(this.state.char.combat);
-        const civil = mapObject(this.state.char.civil);
-        const talents = mapObject(this.state.char.talents);
-        const summary = mapObject(this.state.char.getSummary());
+        const language = this.state.language;
+        const attributes = mapObject(this.state.char.attributes, language);
+        const combat = mapObject(this.state.char.combat, language);
+        const civil = mapObject(this.state.char.civil, language);
+        const talents = mapObject(this.state.char.talents, language);
+        const summary = mapObject(this.state.char.getSummary(), language);
         return (
-            <View
-                style={{flex: 1, paddingTop: 20, backgroundColor: '#aea69b'}}>
-                <RacePicker race={this.state.char.race}
-                            changeRace={(value) => {
-                                let char = this.state.char;
-                                char.setRace(value);
-                                this.setState({char: char})
-                            }}
-                            styles={styles}
+            <MenuContext style={{
+                flex: 1
+            }}>
+                <TopNavigation
+                    language={this.state.language}
+                    changeLanguage={(value) => {
+                        this.setState({
+                            language: value
+                        });
+                    }}
                 />
-                <Level level={this.state.char.level}
-                       increase={() => {
-                           let char = this.state.char;
-                           char.levelUp();
-                           this.setState({char: char})
-                       }}
-                       decrease={() => {
-                           let char = this.state.char;
-                           char.levelDown();
-                           this.setState({char: char})
-                       }}
-                       buttonColor={buttonColor}
-                       styles={styles}
-                />
-                <IndicatorViewPager
-                    style={{flex: 1}}
-                    indicator={
-                        <PagerDotIndicator
-                            pageCount={5}/>
-                    }>
-                    <View style={styles.page}>
-                        <Text style={styles.points}>Points
-                            left: {this.state.char.getPoints().attributes}</Text>
-                        <FlatList
-                            removeClippedSubviews={false}
-                            data={attributes}
-                            renderItem={({item}) => this.renderPlan(item, 'attributes')}
-                        />
-                    </View>
-                    <View style={styles.page}>
-                        <Text style={styles.points}>Points
-                            left: {this.state.char.getPoints().combat}</Text>
-                        <SectionList
-                            renderItem={({item}) => this.renderPlan(item, 'combat')}
-                            renderSectionHeader={({section}) => <Text
-                                style={styles.header}>{section.title}</Text>}
-                            sections={[
-                                {
-                                    data: combat.filter((item) => item.group === 'weapons'),
-                                    title: 'Weapons'
-                                },
-                                {
-                                    data: combat.filter((item) => item.group === 'defence'),
-                                    title: 'Defence'
-                                },
-                                {
-                                    data: combat.filter((item) => item.group === 'skills'),
-                                    title: 'Skills'
-                                },
-                            ]}
-                        />
-                    </View>
-                    <View style={styles.page}>
-                        <Text style={styles.points}>Points
-                            left: {this.state.char.getPoints().civil}</Text>
-                        <SectionList
-                            renderItem={({item}) => this.renderPlan(item, 'civil')}
-                            renderSectionHeader={({section}) => <Text
-                                style={styles.header}>{section.title}</Text>}
-                            sections={[
-                                {
-                                    data: civil.filter((item) => item.group === 'personality'),
-                                    title: 'Personality'
-                                },
-                                {
-                                    data: civil.filter((item) => item.group === 'craftsmanship'),
-                                    title: 'Craftsmanship'
-                                },
-                                {
-                                    data: civil.filter((item) => item.group === 'nasty'),
-                                    title: 'Nasty deeds'
-                                },
-                            ]}
-                        />
-                    </View>
-                    <View style={styles.page}>
-                        <Text style={styles.points}>Points
-                            left: {this.state.char.getPoints().talents}</Text>
-                        <FlatList
-                            removeClippedSubviews={false}
-                            data={talents}
-                            renderItem={({item}) => {
-                                return <View key={item.key} style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    marginTop: 5
-                                }}>
-                                    <View style={{flex: .7}}>
-                                        <Text style={styles.text}
-                                              onPress={() => {
-                                                  this.showDescription(!this.state.modal, item.description)
-                                              }}>
-                                            {item.name}
-                                        </Text>
-                                    </View>
-                                    <View style={{flex: .2}}>
-                                        <Button
-                                            title={(item.value) ? 'Refuse' : 'Take'}
-                                            color={buttonColor}
-                                            onPress={() => {
-                                                let char = this.state.char;
-                                                char.switchTalent(item.key);
-                                                this.setState({char: char})
-                                            }
-                                            }/>
-                                    </View></View>
-                            }}
-                        />
-                    </View>
-                    <View style={styles.page}>
-                        <SectionList
-                            renderItem={({item}) => this.renderSummary(item)}
-                            renderSectionHeader={({section}) => <Text
-                                style={styles.header}>{section.title}</Text>}
-                            sections={[
-                                {
-                                    data: summary.filter((item) => item.group === 'base'),
-                                    title: 'Basic'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'strDmg'),
-                                    title: 'Strength-based Damage'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'finDmg'),
-                                    title: 'Finesse-based Damage'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'intDmg'),
-                                    title: 'Intelligence-based Damage'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'otherDmg'),
-                                    title: 'Other-type Damage'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'crit'),
-                                    title: 'Critical chance'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'accuracy'),
-                                    title: 'Accuracy'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'armor'),
-                                    title: 'Armor'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'otherDefence'),
-                                    title: 'Other Defences'
-                                },
-                                {
-                                    data: summary.filter((item) => item.group === 'resist'),
-                                    title: 'Resistance'
-                                },
-                            ]}
-                        />
-                    </View>
-                </IndicatorViewPager>
-                <Tooltip visible={this.state.modal}
-                         showDescription={() => {
-                             this.showDescription(!this.state.modal)
-                         }}
-                         description={this.state.description}
-                         styles={styles}
-                />
-            </View>
+                <View
+                    style={{
+                        flex: 1, backgroundColor: '#aea69b'
+                    }}>
+                    <RacePicker race={this.state.char.race}
+                                changeRace={(value) => {
+                                    let char = this.state.char;
+                                    char.setRace(value);
+                                    this.setState({char: char})
+                                }}
+                                styles={styles}
+                    />
+                    <Level level={this.state.char.level}
+                           increase={() => {
+                               let char = this.state.char;
+                               char.levelUp();
+                               this.setState({char: char})
+                           }}
+                           decrease={() => {
+                               let char = this.state.char;
+                               char.levelDown();
+                               this.setState({char: char})
+                           }}
+                           buttonColor={buttonColor}
+                           styles={styles}
+                    />
+                    <IndicatorViewPager
+                        style={{flex: 1}}
+                        indicator={
+                            <PagerDotIndicator
+                                pageCount={5}/>
+                        }>
+                        <View style={styles.page}>
+                            <Text style={styles.points}>Points
+                                left: {this.state.char.getPoints().attributes}</Text>
+                            <FlatList
+                                removeClippedSubviews={false}
+                                data={attributes}
+                                renderItem={({item}) => this.renderPlan(item, 'attributes')}
+                            />
+                        </View>
+                        <View style={styles.page}>
+                            <Text style={styles.points}>Points
+                                left: {this.state.char.getPoints().combat}</Text>
+                            <SectionList
+                                renderItem={({item}) => this.renderPlan(item, 'combat')}
+                                renderSectionHeader={({section}) => <Text
+                                    style={styles.header}>{section.title}</Text>}
+                                sections={[
+                                    {
+                                        data: combat.filter((item) => item.group === 'weapons'),
+                                        title: 'Weapons'
+                                    },
+                                    {
+                                        data: combat.filter((item) => item.group === 'defence'),
+                                        title: 'Defence'
+                                    },
+                                    {
+                                        data: combat.filter((item) => item.group === 'skills'),
+                                        title: 'Skills'
+                                    },
+                                ]}
+                            />
+                        </View>
+                        <View style={styles.page}>
+                            <Text style={styles.points}>Points
+                                left: {this.state.char.getPoints().civil}</Text>
+                            <SectionList
+                                renderItem={({item}) => this.renderPlan(item, 'civil')}
+                                renderSectionHeader={({section}) => <Text
+                                    style={styles.header}>{section.title}</Text>}
+                                sections={[
+                                    {
+                                        data: civil.filter((item) => item.group === 'personality'),
+                                        title: 'Personality'
+                                    },
+                                    {
+                                        data: civil.filter((item) => item.group === 'craftsmanship'),
+                                        title: 'Craftsmanship'
+                                    },
+                                    {
+                                        data: civil.filter((item) => item.group === 'nasty'),
+                                        title: 'Nasty deeds'
+                                    },
+                                ]}
+                            />
+                        </View>
+                        <View style={styles.page}>
+                            <Text style={styles.points}>Points
+                                left: {this.state.char.getPoints().talents}</Text>
+                            <FlatList
+                                removeClippedSubviews={false}
+                                data={talents}
+                                renderItem={({item}) => {
+                                    return <View key={item.key} style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginTop: 5
+                                    }}>
+                                        <View style={{flex: .7}}>
+                                            <Text style={styles.text}
+                                                  onPress={() => {
+                                                      this.showDescription(!this.state.modal, item.description)
+                                                  }}>
+                                                {item.name}
+                                            </Text>
+                                        </View>
+                                        <View style={{flex: .2}}>
+                                            <Button
+                                                title={(item.value) ? 'Refuse' : 'Take'}
+                                                color={buttonColor}
+                                                onPress={() => {
+                                                    let char = this.state.char;
+                                                    char.switchTalent(item.key);
+                                                    this.setState({char: char})
+                                                }
+                                                }/>
+                                        </View></View>
+                                }}
+                            />
+                        </View>
+                        <View style={styles.page}>
+                            <SectionList
+                                renderItem={({item}) => this.renderSummary(item)}
+                                renderSectionHeader={({section}) => <Text
+                                    style={styles.header}>{section.title}</Text>}
+                                sections={[
+                                    {
+                                        data: summary.filter((item) => item.group === 'base'),
+                                        title: 'Basic'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'strDmg'),
+                                        title: 'Strength-based Damage'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'finDmg'),
+                                        title: 'Finesse-based Damage'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'intDmg'),
+                                        title: 'Intelligence-based Damage'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'otherDmg'),
+                                        title: 'Other-type Damage'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'crit'),
+                                        title: 'Critical chance'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'accuracy'),
+                                        title: 'Accuracy'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'armor'),
+                                        title: 'Armor'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'otherDefence'),
+                                        title: 'Other Defences'
+                                    },
+                                    {
+                                        data: summary.filter((item) => item.group === 'resist'),
+                                        title: 'Resistance'
+                                    },
+                                ]}
+                            />
+                        </View>
+                    </IndicatorViewPager>
+                    <Tooltip visible={this.state.modal}
+                             showDescription={() => {
+                                 this.showDescription(!this.state.modal)
+                             }}
+                             description={this.state.description}
+                             styles={styles}
+                    />
+                </View>
+            </MenuContext>
         );
     }
 }

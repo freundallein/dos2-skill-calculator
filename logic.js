@@ -16,13 +16,13 @@ const nullifyObjectValues = (obj) => {
     Object.keys(obj).map((key) => obj[key] = false);
 };
 
-export const mapObject = (object) => {
+export const mapObject = (object, lang) => {
     return Object.keys(object).map(function (key) {
         return {
             key: key,
-            name: getName(key),
+            name: getName(key, lang),
             value: object[key],
-            description: getDescription(key),
+            description: getDescription(key, lang),
             group: getGroup(key)
         }
     });
