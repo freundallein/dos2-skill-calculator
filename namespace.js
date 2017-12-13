@@ -573,7 +573,7 @@ const interfaceNamespace = {
         acc: 'Accuracy',
         arm: 'Armor',
         OD: 'Other Defences',
-        res: 'Resistance'
+        resist: 'Resistance'
     },
     RU: {
         save: 'Сохранить',
@@ -596,7 +596,7 @@ const interfaceNamespace = {
         acc: 'Точность',
         arm: 'Броня',
         OD: 'Другие защиты',
-        res: 'Сопротивление'
+        resist: 'Сопротивление'
 
     }
 };
