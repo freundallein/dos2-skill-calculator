@@ -4,10 +4,11 @@ import {
     View,
     Button
 } from 'react-native';
-
+import {translateInterface} from '../namespace';
 
 class Level extends React.Component {
     render() {
+        const language = this.props.language;
         const level = this.props.level;
         const increase = this.props.increase;
         const decrease = this.props.decrease;
@@ -22,7 +23,7 @@ class Level extends React.Component {
             </View>
             <View style={{flex: .4}}>
                 <Text style={styles.header}>
-                    Level {level}
+                    {translateInterface('level', language)} {level}
                 </Text>
             </View>
             <View style={{flex: .3}}>

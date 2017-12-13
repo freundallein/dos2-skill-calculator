@@ -5,8 +5,7 @@ import {
     View,
     Button,
     FlatList,
-    SectionList,
-    AppState
+    SectionList
 } from 'react-native';
 import {
     IndicatorViewPager,
@@ -22,6 +21,8 @@ import Tooltip from "./components/Tooltip";
 import TopNavigation from "./components/Menu";
 
 import Datastore from 'react-native-local-mongodb';
+
+import {translateInterface} from './namespace';
 
 
 export default class App extends React.Component {
@@ -73,7 +74,6 @@ export default class App extends React.Component {
     }
 
     save(value) {
-        console.log(`Save to ${value}`);
         this.db.find({name: value}, (err, docs) => {
             lastState = docs[0];
             const newSlot = {
@@ -89,7 +89,6 @@ export default class App extends React.Component {
     }
 
     load(value) {
-        console.log(`Load from ${value}`);
         this.db.find({name: value}, (err, docs) => {
             lastState = docs[0];
             if (lastState !== undefined) {
@@ -193,6 +192,7 @@ export default class App extends React.Component {
                         flex: 1, backgroundColor: '#aea69b'
                     }}>
                     <RacePicker race={this.state.char.race}
+                                language={language}
                                 changeRace={(value) => {
                                     let char = this.state.char;
                                     char.setRace(value);
@@ -201,6 +201,7 @@ export default class App extends React.Component {
                                 styles={styles}
                     />
                     <Level level={this.state.char.level}
+                           language={language}
                            increase={() => {
                                let char = this.state.char;
                                char.levelUp();
@@ -221,8 +222,9 @@ export default class App extends React.Component {
                                 pageCount={5}/>
                         }>
                         <View style={styles.page}>
-                            <Text style={styles.points}>Points
-                                left: {this.state.char.getPoints().attributes}</Text>
+                            <Text style={styles.points}>
+                                {translateInterface('points', language)}: {this.state.char.getPoints().attributes}
+                            </Text>
                             <FlatList
                                 removeClippedSubviews={false}
                                 data={attributes}
@@ -230,8 +232,9 @@ export default class App extends React.Component {
                             />
                         </View>
                         <View style={styles.page}>
-                            <Text style={styles.points}>Points
-                                left: {this.state.char.getPoints().combat}</Text>
+                            <Text style={styles.points}>
+                                {translateInterface('points', language)}: {this.state.char.getPoints().combat}
+                            </Text>
                             <SectionList
                                 renderItem={({item}) => this.renderPlan(item, 'combat')}
                                 renderSectionHeader={({section}) => <Text
@@ -239,22 +242,23 @@ export default class App extends React.Component {
                                 sections={[
                                     {
                                         data: combat.filter((item) => item.group === 'weapons'),
-                                        title: 'Weapons'
+                                        title: translateInterface('weapons', language)
                                     },
                                     {
                                         data: combat.filter((item) => item.group === 'defence'),
-                                        title: 'Defence'
+                                        title: translateInterface('defence', language)
                                     },
                                     {
                                         data: combat.filter((item) => item.group === 'skills'),
-                                        title: 'Skills'
+                                        title: translateInterface('skills', language)
                                     },
                                 ]}
                             />
                         </View>
                         <View style={styles.page}>
-                            <Text style={styles.points}>Points
-                                left: {this.state.char.getPoints().civil}</Text>
+                            <Text style={styles.points}>
+                                {translateInterface('points', language)}: {this.state.char.getPoints().civil}
+                            </Text>
                             <SectionList
                                 renderItem={({item}) => this.renderPlan(item, 'civil')}
                                 renderSectionHeader={({section}) => <Text
@@ -262,22 +266,23 @@ export default class App extends React.Component {
                                 sections={[
                                     {
                                         data: civil.filter((item) => item.group === 'personality'),
-                                        title: 'Personality'
+                                        title: translateInterface('personality', language)
                                     },
                                     {
                                         data: civil.filter((item) => item.group === 'craftsmanship'),
-                                        title: 'Craftsmanship'
+                                        title: translateInterface('craft', language)
                                     },
                                     {
                                         data: civil.filter((item) => item.group === 'nasty'),
-                                        title: 'Nasty deeds'
+                                        title: translateInterface('nasty', language)
                                     },
                                 ]}
                             />
                         </View>
                         <View style={styles.page}>
-                            <Text style={styles.points}>Points
-                                left: {this.state.char.getPoints().talents}</Text>
+                            <Text style={styles.points}>
+                                {translateInterface('points', language)}: {this.state.char.getPoints().talents}
+                            </Text>
                             <FlatList
                                 removeClippedSubviews={false}
                                 data={talents}
@@ -317,43 +322,43 @@ export default class App extends React.Component {
                                 sections={[
                                     {
                                         data: summary.filter((item) => item.group === 'base'),
-                                        title: 'Basic'
+                                        title: translateInterface('basic', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'strDmg'),
-                                        title: 'Strength-based Damage'
+                                        title: translateInterface('strBD', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'finDmg'),
-                                        title: 'Finesse-based Damage'
+                                        title: translateInterface('finBD', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'intDmg'),
-                                        title: 'Intelligence-based Damage'
+                                        title: translateInterface('intBD', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'otherDmg'),
-                                        title: 'Other-type Damage'
+                                        title: translateInterface('OTBD', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'crit'),
-                                        title: 'Critical chance'
+                                        title: translateInterface('crit', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'accuracy'),
-                                        title: 'Accuracy'
+                                        title: translateInterface('acc', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'armor'),
-                                        title: 'Armor'
+                                        title: translateInterface('arm', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'otherDefence'),
-                                        title: 'Other Defences'
+                                        title: translateInterface('OD', language)
                                     },
                                     {
                                         data: summary.filter((item) => item.group === 'resist'),
-                                        title: 'Resistance'
+                                        title: translateInterface('resist', language)
                                     },
                                 ]}
                             />

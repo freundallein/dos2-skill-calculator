@@ -211,7 +211,7 @@ let character = {
             poison: allResist + (this.racialTalents.Sophisticated) ? 10 : 0,
 
             initiative: (this.talents.LoneWolf) ? this.attributes.wits * 2 : this.attributes.wits,
-            memorySlots: (this.talents.LoneWolf) ? this.attributes.memory * 2 : this.attributes.memory,
+            memorySlots: Math.floor(3 + ((this.talents.LoneWolf) ? this.attributes.memory * 2 : this.attributes.memory) - 10 + this.level/2),
             moveSpeed: 5 + ((this.talents.LoneWolf) ? this.combat.scoundrel * 0.6 : this.combat.scoundrel * 0.3),
             maxAP: 6 + ((this.talents.LoneWolf) ? 2 : 0),
             startAP: (this.talents.GlassCannon) ? (6 + ((this.talents.LoneWolf) ? 2 : 0)) : 4,

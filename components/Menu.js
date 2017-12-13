@@ -4,6 +4,7 @@ import {
     View
 } from 'react-native';
 import Menu, {MenuOptions, MenuOption, MenuTrigger} from 'react-native-menu';
+import {translateInterface} from '../namespace';
 
 class TopNavigation extends React.Component {
     render() {
@@ -28,7 +29,9 @@ class TopNavigation extends React.Component {
                             <Text style={{
                                 fontSize: 14,
                                 color: 'white'
-                            }}>Save</Text>
+                            }}>
+                                {translateInterface('save', language)}
+                            </Text>
                         </MenuTrigger>
                         <MenuOptions>
                             <MenuOption value={'slot1'}>
@@ -50,7 +53,9 @@ class TopNavigation extends React.Component {
                             <Text style={{
                                 fontSize: 14,
                                 color: 'white'
-                            }}>Load</Text>
+                            }}>
+                                {translateInterface('load', language)}
+                            </Text>
                         </MenuTrigger>
                         <MenuOptions>
                             <MenuOption value={'slot1'}>

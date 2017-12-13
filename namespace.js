@@ -127,33 +127,33 @@ const namespace = {
         intelligence: 'Интеллект',
         constitution: 'Телосложение',
         memory: 'Память',
-        wits: 'Wits',
+        wits: 'Восприятие',
 
-        dualWielding: 'Dual wielding',
-        ranged: 'Ranged',
-        singlehanded: 'Single-handed',
-        twohanded: 'Two-handed',
-        leadership: 'Leadership',
-        perseverance: 'Perseverance',
-        retribution: 'Retribution',
-        aerothurge: 'Aerothurge',
-        geomancer: 'Geomancer',
-        huntsman: 'Huntsman',
-        hydrosophist: 'Hydrosophist',
-        necromancer: 'Necromancer',
-        polymorph: 'Polymorph',
-        pyrokinetic: 'Pyrokinetic',
-        scoundrel: 'Scoundrel',
-        summoning: 'Summoning',
-        warfare: 'Warfare',
+        dualWielding: 'Два оружия',
+        ranged: 'Дальний бой',
+        singlehanded: 'Одноручное',
+        twohanded: 'Двуручное',
+        leadership: 'Лидерство',
+        perseverance: 'Стойкость',
+        retribution: 'Воздаяние',
+        aerothurge: 'Аэротургия',
+        geomancer: 'Геомантия',
+        huntsman: 'Мастерство охоты',
+        hydrosophist: 'Гидрософистика',
+        necromancer: 'Некромантия',
+        polymorph: 'Превращение',
+        pyrokinetic: 'Пирокинетика',
+        scoundrel: 'Исскуство убийства',
+        summoning: 'Призывание',
+        warfare: 'Военное дело',
 
-        bartering: 'Bartering',
-        luckyCharm: 'Lucky charm',
-        persuasion: 'Persuasion',
-        loremaster: 'Loremaster',
-        telekinesis: 'Telekinesis',
-        sneaking: 'Sneaking',
-        thievery: 'Thievery',
+        bartering: 'Обмен',
+        luckyCharm: 'Везучесть',
+        persuasion: 'Убеждение',
+        loremaster: 'Знание легенд',
+        telekinesis: 'Телекинез',
+        sneaking: 'Скрытность',
+        thievery: 'Воровство',
 
         AllSkilledUp: 'All skilled up',
         Ambidextrous: 'Ambidextrous',
@@ -190,58 +190,58 @@ const namespace = {
         WalkItOff: 'Walk it off',
         WhatARush: 'What a rush',
 
-        health: 'Health',
+        health: 'Здоровье',
 
-        phArmor: 'Physical Armor',
-        mArmor: 'Magic Armor',
-        restorePhArmor: 'Physical Armor restoration',
-        restoreMArmor: 'Magic armor restoration',
-        restoreArmorFromStatus: 'Armor restored by status',
+        phArmor: 'Физическая броня',
+        mArmor: 'Магическая броня',
+        restorePhArmor: 'Восстановление физ. брони',
+        restoreMArmor: 'Восстановление маг. брони',
+        restoreArmorFromStatus: 'Восстановление брони от статусов',
 
-        strDmg: 'Strength damage, %',
-        physDmg: 'Physical damage, %',
-        SHDmg: 'Single-handed damage, %',
-        THDmg: 'Two-handed damage, %',
-        finDmg: 'Finesse damage, %',
-        DWDmg: 'Dual wielding damage, %',
-        RangedDmg: 'Ranged damage, %',
-        SneakDmg: 'Sneaking damage, %',
-        intDmg: 'Intelligence damage, %',
-        PoisonDmg: 'Poison damage, %',
-        FireDmg: 'Fire damage, %',
-        reflectDmg: 'Retribution reflect dmg, %',
-        MADmg: 'Magic Armor damage, %',
-        HGDmg: 'Damage from high ground, %',
-        SummonDmg: 'Summoning damage, %',
+        strDmg: 'Урон от силы, %',
+        physDmg: 'Физический урон, %',
+        SHDmg: 'Урон одноручным, %',
+        THDmg: 'Урон двуручным, %',
+        finDmg: 'Урон от ловкости, %',
+        DWDmg: 'Урон от двух оружий, %',
+        RangedDmg: 'Урон дальнего боя, %',
+        SneakDmg: 'Урон от скрытности, %',
+        intDmg: 'Урон от интеллекта, %',
+        PoisonDmg: 'Урон ядом, %',
+        FireDmg: 'Урон огнем, %',
+        reflectDmg: 'Урон от воздаяния, %',
+        MADmg: 'Урон от маг. брони, %',
+        HGDmg: 'Урон с возвышенности, %',
+        SummonDmg: 'Урон призванных сущ., %',
 
-        critChance: 'Critical chance, %',
-        rangedCritChance: 'Ranged critical chance, %',
-        critChanceFullHP: 'Critical chance at Full HP, %',
-        critChanceMultiplier: 'Critical strike damage multiplier',
-        THCritChanceMultiplier: 'Two-handed crit damage multiplier',
+        critChance: 'Шанс крита, %',
+        rangedCritChance: 'Шанс крита дальнего боя, %',
+        critChanceFullHP: 'Шанс крита на полном здоровье, %',
+        critChanceMultiplier: 'Множитель урона от крита',
+        THCritChanceMultiplier: 'Множитель урона от двуручного',
 
-        baseAcc: 'Base accuracy, %',
-        SHAcc: 'Single-handed accuracy, %',
-        FullHPAcc: 'Accuracy at Full HP, %',
+        baseAcc: 'Точность, %',
+        SHAcc: 'Точность одноручнм, %',
+        FullHPAcc: 'Точность с полным здоровьем, %',
 
-        dodge: 'Dodge, %',
-        necroHealing: 'Necromancer healing, %',
-        healingIncrease: 'Healing increase, %',
+        dodge: 'Уклонение, %',
+        necroHealing: 'Лечение некромантией, %',
+        healingIncrease: 'Улучшение лечения, %',
 
-        fire: 'Fire resistance, %',
-        water: 'Water resistance, %',
-        earth: 'Earth resistance, %',
-        air: 'Air resistance, %',
-        poison: 'Poison resistance, %',
+        fire: 'Сопротивление огню, %',
+        water: 'Сопротивление воде, %',
+        earth: 'Сопротивление земле, %',
+        air: 'Сопротивление воздуху, %',
+        poison: 'Сопротивление яду, %',
 
-        initiative: 'Initiative',
-        memorySlots: 'Memory slots',
-        moveSpeed: 'Move speed',
-        maxAP: 'Max action points',
-        startAP: 'Start turn action points',
-        turnAP: 'Each turn action points',
-        moveWeight: 'Move weight',
-        carryWeight: 'Carry weight'
+        initiative: 'Инициатива',
+        memorySlots: 'Ячейки памяти',
+        moveSpeed: 'Скокрость движения',
+        maxAP: 'Максимальные ОД',
+        startAP: 'Начальные ОД',
+        turnAP: 'ОД на ход',
+        moveWeight: 'Переносимый вес',
+        carryWeight: 'Макс. переносимый вес'
     }
 };
 
@@ -551,15 +551,68 @@ const groups = {
     air: 'resist',
     poison: 'resist'
 };
+const interfaceNamespace = {
+    EN: {
+        save: 'Save',
+        load: 'Load',
+        race: 'Race',
+        level: 'Level',
+        points: 'Points left',
+        weapons: 'Weapons',
+        defence: 'Defence',
+        skills: 'Skills',
+        personality: 'Personality',
+        craft: 'Craftsmanship',
+        nasty: 'Nasty deeds',
+        basic: 'basic',
+        strBD: 'Strength-based Damage',
+        finBD: 'Finesse-based Damage',
+        intBD: 'Intelligence-based Damage',
+        OTBD: 'Other-type Damage',
+        crit: 'Critical chance',
+        acc: 'Accuracy',
+        arm: 'Armor',
+        OD: 'Other Defences',
+        res: 'Resistance'
+    },
+    RU: {
+        save: 'Сохранить',
+        load: 'Загрузить',
+        race: 'Раса',
+        level: 'Уровень',
+        points: 'Осталось очков',
+        weapons: 'Оружие',
+        defence: 'Защита',
+        skills: 'Навыки',
+        personality: 'Личность',
+        craft: 'Мастерство',
+        nasty: 'Мутные дела',
+        basic: 'Базовые',
+        strBD: 'Урон на основе Силы',
+        finBD: 'Урон на основе Ловкости',
+        intBD: 'Урон на основе Интеллекта',
+        OTBD: 'Другой урон',
+        crit: 'Критический шанс',
+        acc: 'Точность',
+        arm: 'Броня',
+        OD: 'Другие защиты',
+        res: 'Сопротивление'
+
+    }
+};
 
 export const getName = (key, lang) => {
     return namespace[lang][key]
 };
 
 export const getDescription = (key, lang) => {
-    return descriptions[lang][key]
+    return descriptions['EN'][key]
 };
 
 export const getGroup = (key) => {
     return groups[key]
+};
+
+export const translateInterface = (key, lang) => {
+    return interfaceNamespace[lang][key]
 };
