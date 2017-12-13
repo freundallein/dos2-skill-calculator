@@ -35,53 +35,41 @@ export default class App extends React.Component {
             char: character,
             modal: false,
             description: '',
-            language: 'EN',
-            appState: AppState.currentState
+            language: 'EN'
         };
-        this.db.find({name: 'last'}, this.updateLastState('last'));
+        this.db.find({name: 'lang'}, this.checkLanguage());
     }
 
-    componentDidMount() {
-        AppState.addEventListener('change', this._handleAppStateChange);
-    }
-
-    componentWillUnmount() {
-        AppState.removeEventListener('change', this._handleAppStateChange);
-    }
-
-    _handleAppStateChange = (nextAppState) => {
-        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-            const lastState = {
-                name: 'last',
-                language: this.state.language,
-                char: this.state.char
-            };
-            this.db.find({name: 'last'}, (err, docs) => {
-                this.db.update({name: 'last'}, lastState);
-            });
-        }
-        this.setState({appState: nextAppState});
-    };
-
-    updateLastState(slot) {
+    checkLanguage() {
         return (err, docs) => {
             lastState = docs[0];
             if (lastState === undefined) {
                 const lastState = {
-                    name: slot,
-                    language: this.state.language,
-                    char: this.state.char
+                    name: 'lang',
+                    language: this.state.language
                 };
                 this.db.insert(lastState)
             } else {
-                let char = this.state.char;
-                char.updateChar(lastState.char);
                 this.setState({
-                    char: char,
                     language: lastState.language
                 });
             }
         }
+    }
+
+    updateLanguage(value) {
+        this.db.find({name: 'lang'}, (err, docs) => {
+            lastState = docs[0];
+            const newLang = {
+                name: 'lang',
+                language: value
+            };
+            if (lastState === undefined) {
+                this.db.insert(newLang)
+            } else {
+                this.db.update({name: 'lang'}, newLang);
+            }
+        })
     }
 
     save(value) {
@@ -90,7 +78,6 @@ export default class App extends React.Component {
             lastState = docs[0];
             const newSlot = {
                 name: value,
-                language: this.state.language,
                 char: this.state.char
             };
             if (lastState === undefined) {
@@ -110,7 +97,6 @@ export default class App extends React.Component {
                 char.updateChar(lastState.char);
                 this.setState({
                     char: char,
-                    language: lastState.language
                 });
             }
         });
@@ -197,6 +183,7 @@ export default class App extends React.Component {
                         this.setState({
                             language: value
                         });
+                        this.updateLanguage(value)
                     }}
                     save={(value) => this.save(value)}
                     load={(value) => this.load(value)}
