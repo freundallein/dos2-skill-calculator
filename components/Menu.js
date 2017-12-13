@@ -33,7 +33,12 @@ class TopNavigation extends React.Component {
                                 {translateInterface('save', language)}
                             </Text>
                         </MenuTrigger>
-                        <MenuOptions>
+                        <MenuOptions
+                            optionsContainerStyle={{
+                                marginLeft: 30,
+                                right: null
+                            }}
+                        >
                             <MenuOption value={'slot1'}>
                                 <Text>Slot 1</Text>
                             </MenuOption>
