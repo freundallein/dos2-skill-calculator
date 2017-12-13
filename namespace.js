@@ -564,7 +564,7 @@ const interfaceNamespace = {
         personality: 'Personality',
         craft: 'Craftsmanship',
         nasty: 'Nasty deeds',
-        basic: 'basic',
+        basic: 'Basic',
         strBD: 'Strength-based Damage',
         finBD: 'Finesse-based Damage',
         intBD: 'Intelligence-based Damage',
