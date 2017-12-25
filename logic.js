@@ -49,7 +49,8 @@ export const getBaseHealth = (level) => {
         17: 1255,
         18: 1790,
         19: 2240,
-        20: 2815
+        20: 2815,
+        21: 3110
     };
     return baseDmg[level]
 };
@@ -227,7 +228,7 @@ let character = {
         (this.level > 1) ? this.level -= 1 : this.error = 'Min level reached'
     },
     switchTalent(name) {
-        if (this.getPoints().talents > 0) {
+        if (this.getPoints().talents >= 0) {
             switch (name) {
                 case 'LoneWolf':
                     if (!this.talents.GlassCannon) {
