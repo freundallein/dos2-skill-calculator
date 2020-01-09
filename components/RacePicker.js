@@ -4,17 +4,20 @@ import {
     View,
     Picker
 } from 'react-native';
-
+import {translateInterface} from '../namespace';
 
 class RacePicker extends React.Component {
     render() {
+        const language = this.props.language;
         const styles = this.props.styles;
         const race = this.props.race;
         const changeRace = this.props.changeRace;
 
         return <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={{flex: .5}}>
-                <Text style={styles.header}>Race</Text>
+                <Text style={styles.header}>
+                   {translateInterface('race', language)}
+                </Text>
             </View>
             <View style={{flex: .5}}>
                 <Picker

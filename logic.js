@@ -1,4 +1,4 @@
-import {getName, getDescription, getSkillGroup} from './namespace';
+import {getName, getDescription, getGroup} from './namespace';
 
 const sumKeys = (obj) => {
     return Object.keys(obj)
@@ -16,14 +16,14 @@ const nullifyObjectValues = (obj) => {
     Object.keys(obj).map((key) => obj[key] = false);
 };
 
-export const mapObject = (object) => {
+export const mapObject = (object, language) => {
     return Object.keys(object).map(function (key) {
         return {
             key: key,
-            name: getName(key),
+            name: getName(key, language),
             value: object[key],
-            description: getDescription(key),
-            skillGroup: getSkillGroup(key)
+            description: getDescription(key, language),
+            group: getGroup(key)
         }
     });
 };
@@ -49,7 +49,8 @@ export const getBaseHealth = (level) => {
         17: 1255,
         18: 1790,
         19: 2240,
-        20: 2815
+        20: 2815,
+        21: 3110
     };
     return baseDmg[level]
 };
@@ -143,6 +144,15 @@ let character = {
         Thrifty: false,
         Undead: false,
     },
+    updateChar(state) {
+        this.race = state.race;
+        this.level = state.level;
+        this.attributes = state.attributes;
+        this.combat = state.combat;
+        this.civil = state.civil;
+        this.talents = state.talents;
+        this.racialTalents = state.racialTalents;
+    },
     getPoints() {
         return {
             attributes: 3 + 2 * (this.level - 1) + this.combat.polymorph + 60 - sumKeys(this.attributes) + ((this.talents.BiggerAndBetter) ? 2 : 0),
@@ -202,7 +212,7 @@ let character = {
             poison: allResist + (this.racialTalents.Sophisticated) ? 10 : 0,
 
             initiative: (this.talents.LoneWolf) ? this.attributes.wits * 2 : this.attributes.wits,
-            memorySlots: (this.talents.LoneWolf) ? this.attributes.memory * 2 : this.attributes.memory,
+            memorySlots: Math.floor(3 + ((this.talents.LoneWolf) ? this.attributes.memory * 2 : this.attributes.memory) - 10 + this.level / 2),
             moveSpeed: 5 + ((this.talents.LoneWolf) ? this.combat.scoundrel * 0.6 : this.combat.scoundrel * 0.3),
             maxAP: 6 + ((this.talents.LoneWolf) ? 2 : 0),
             startAP: (this.talents.GlassCannon) ? (6 + ((this.talents.LoneWolf) ? 2 : 0)) : 4,
@@ -212,7 +222,7 @@ let character = {
         }
     },
     levelUp() {
-        (this.level < 20) ? this.level += 1 : this.error = 'Max level reached'
+        (this.level < 21) ? this.level += 1 : this.error = 'Max level reached'
     },
     levelDown() {
         (this.level > 1) ? this.level -= 1 : this.error = 'Min level reached'
@@ -223,14 +233,14 @@ let character = {
                 if (!this.talents.GlassCannon) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                this.error = "Can't be chosen with Glass Cannon Talent"
+                    this.error = "Can't be chosen with Glass Cannon Talent"
                 }
                 break;
             case 'GlassCannon':
                 if (!this.talents.LoneWolf) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                this.error = "Can't be chosen with Lone Wolf Talent"
+                    this.error = "Can't be chosen with Lone Wolf Talent"
                 }
                 break;
             case 'BiggerAndBetter':
@@ -238,36 +248,36 @@ let character = {
                 if (this.level >= 2) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                this.error = "Need 2 level"
+                    this.error = "Need 2 level"
                 }
                 break;
             case 'Demon':
                 if (!this.talents.Ice_King && this.combat.pyrokinetic > 0) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                      this.error = "Pyrokinetic skill must be above 0 and Ice King Talent mustn't to be chosen"
-                  }
+                    this.error = "Pyrokinetic skill must be above 0 and Ice King Talent mustn't to be chosen"
+                }
                 break;
             case 'Ice_King':
                 if (!this.talents.Demon && this.combat.hydrosophist > 0) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                     this.error = "Hydrosophist skill must be above 0 and Demon Talent mustn't to be chosen"
-                 }
+                    this.error = "Hydrosophist skill must be above 0 and Demon Talent mustn't to be chosen"
+                }
                 break;
             case 'ElementalRanger':
             case 'DuckDuckGoose':
                 if (this.combat.huntsman > 0) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                  this.error = "Huntsman skill must be above 0"
+                    this.error = "Huntsman skill must be above 0"
                 }
                 break;
             case 'Executioner':
                 if (!this.talents.ThePawn) {
                     this.talents[name] = !this.talents[name];
                 } else {
-                  this.error = "Can't be chosen with The Pawn Talent"
+                    this.error = "Can't be chosen with The Pawn Talent"
                 }
                 break;
             case 'ThePawn':
@@ -282,14 +292,14 @@ let character = {
                     this.talents[name] = !this.talents[name];
                 } else {
                     this.error = "Warfare skill must be above 0"
-                  }
+                }
                 break;
             case 'Guerilla':
                 if (this.combat.sneaking > 0) {
                     this.talents[name] = !this.talents[name];
                 } else {
                     this.error = "Sneaking skill must be above 0"
-                  }
+                }
                 break;
             default:
                 this.talents[name] = !this.talents[name];
